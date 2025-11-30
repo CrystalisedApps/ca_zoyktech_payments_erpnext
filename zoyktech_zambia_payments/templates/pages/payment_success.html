@@ -1,0 +1,154 @@
+{% extends "templates/web.html" %}
+
+{% block title %}{{ _("Payment Successful") }}{% endblock %}
+
+{% block page_content %}
+<div class="container payment-success-container">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card payment-success-card text-center">
+                <div class="card-body">
+                    <div class="payment-success-icon">
+                        <i class="fa fa-check-circle text-success"></i>
+                    </div>
+                    
+                    <h2 class="payment-success-title">{{ _("Payment Successful!") }}</h2>
+                    
+                    <div class="payment-details">
+                        <div class="payment-amount">
+                            <strong>{{ _("Amount Paid:") }}</strong>
+                            <span class="amount">{{ payment_info.amount }} {{ payment_info.currency }}</span>
+                        </div>
+                        
+                        <div class="payment-reference">
+                            <strong>{{ _("Reference:") }}</strong>
+                            <span class="reference">{{ payment_info.reference }}</span>
+                        </div>
+                        
+                        {% if payment_info.transaction_id %}
+                        <div class="transaction-id">
+                            <strong>{{ _("Transaction ID:") }}</strong>
+                            <span class="transaction">{{ payment_info.transaction_id }}</span>
+                        </div>
+                        {% endif %}
+                    </div>
+                    
+                    <div class="payment-message">
+                        <p>{{ _("Thank you for your payment. Your transaction has been completed successfully.") }}</p>
+                        <p class="text-muted">{{ _("A receipt has been sent to your email address.") }}</p>
+                    </div>
+                    
+                    <div class="payment-actions">
+                        <a href="/" class="btn btn-primary">
+                            <i class="fa fa-home"></i> {{ _("Return to Home") }}
+                        </a>
+                        <button class="btn btn-outline-secondary" onclick="window.print()">
+                            <i class="fa fa-print"></i> {{ _("Print Receipt") }}
+                        </button>
+                    </div>
+                    
+                    <div class="additional-info mt-4">
+                        <div class="alert alert-info">
+                            <h6>{{ _("What happens next?") }}</h6>
+                            <ul class="text-left">
+                                <li>{{ _("Your payment has been processed successfully") }}</li>
+                                <li>{{ _("Your order will be processed within 24 hours") }}</li>
+                                <li>{{ _("You will receive a confirmation email shortly") }}</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block script %}
+<script>
+frappe.ready(function() {
+    // Auto-redirect after 10 seconds
+    setTimeout(function() {
+        window.location.href = '/';
+    }, 10000);
+    
+    // Track successful payment
+    frappe.call({
+        method: 'zoyktech_zambia_payments.zoyktech_zambia_payments.api.routes.track_payment_success',
+        args: {
+            reference: '{{ payment_info.reference }}'
+        }
+    });
+});
+</script>
+{% endblock %}
+
+{% block style %}
+<style>
+.payment-success-container {
+    margin-top: 50px;
+    margin-bottom: 50px;
+}
+
+.payment-success-card {
+    border: none;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+}
+
+.payment-success-icon {
+    font-size: 80px;
+    margin-bottom: 20px;
+}
+
+.payment-success-title {
+    color: #28a745;
+    margin-bottom: 30px;
+}
+
+.payment-details {
+    background: #f8f9fa;
+    padding: 20px;
+    border-radius: 8px;
+    margin-bottom: 30px;
+    text-align: left;
+}
+
+.payment-details div {
+    margin-bottom: 10px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.payment-details .amount {
+    font-size: 18px;
+    font-weight: bold;
+    color: #28a745;
+}
+
+.payment-actions {
+    margin-top: 30px;
+}
+
+.payment-actions .btn {
+    margin: 0 5px;
+    min-width: 150px;
+}
+
+@media (max-width: 768px) {
+    .payment-success-container {
+        margin-top: 20px;
+    }
+    
+    .payment-success-icon {
+        font-size: 60px;
+    }
+    
+    .payment-actions .btn {
+        display: block;
+        width: 100%;
+        margin: 5px 0;
+    }
+}
+</style>
+{% endblock %}

@@ -1,0 +1,156 @@
+{% extends "templates/web.html" %}
+
+{% block title %}{{ _("Payment Failed") }}{% endblock %}
+
+{% block page_content %}
+<div class="container payment-failed-container">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card payment-failed-card text-center">
+                <div class="card-body">
+                    <div class="payment-failed-icon">
+                        <i class="fa fa-times-circle text-danger"></i>
+                    </div>
+                    
+                    <h2 class="payment-failed-title">{{ _("Payment Failed") }}</h2>
+                    
+                    <div class="payment-details">
+                        <div class="payment-amount">
+                            <strong>{{ _("Amount:") }}</strong>
+                            <span class="amount">{{ payment_info.amount }} {{ payment_info.currency }}</span>
+                        </div>
+                        
+                        <div class="payment-reference">
+                            <strong>{{ _("Reference:") }}</strong>
+                            <span class="reference">{{ payment_info.reference }}</span>
+                        </div>
+                        
+                        {% if payment_info.failure_reason %}
+                        <div class="failure-reason">
+                            <strong>{{ _("Reason:") }}</strong>
+                            <span class="reason text-danger">{{ payment_info.failure_reason }}</span>
+                        </div>
+                        {% endif %}
+                    </div>
+                    
+                    <div class="payment-message">
+                        <p class="text-danger">{{ _("We're sorry, but your payment could not be processed.") }}</p>
+                        <p>{{ _("This could be due to insufficient funds, incorrect card details, or temporary issues with the payment gateway.") }}</p>
+                    </div>
+                    
+                    <div class="payment-actions">
+                        <a href="{{ payment_info.retry_url }}" class="btn btn-primary">
+                            <i class="fa fa-refresh"></i> {{ _("Try Again") }}
+                        </a>
+                        <a href="/contact" class="btn btn-outline-secondary">
+                            <i class="fa fa-support"></i> {{ _("Contact Support") }}
+                        </a>
+                    </div>
+                    
+                    <div class="troubleshooting-tips mt-4">
+                        <div class="alert alert-warning">
+                            <h6>{{ _("Troubleshooting Tips:") }}</h6>
+                            <ul class="text-left">
+                                <li>{{ _("Check your account balance") }}</li>
+                                <li>{{ _("Verify your card details") }}</li>
+                                <li>{{ _("Ensure your card is enabled for online payments") }}</li>
+                                <li>{{ _("Try a different payment method") }}</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block script %}
+<script>
+frappe.ready(function() {
+    // Track failed payment
+    frappe.call({
+        method: 'zoyktech_zambia_payments.zoyktech_zambia_payments.api.routes.track_payment_failure',
+        args: {
+            reference: '{{ payment_info.reference }}',
+            reason: '{{ payment_info.failure_reason | e }}'
+        }
+    });
+});
+</script>
+{% endblock %}
+
+{% block style %}
+<style>
+.payment-failed-container {
+    margin-top: 50px;
+    margin-bottom: 50px;
+}
+
+.payment-failed-card {
+    border: none;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+}
+
+.payment-failed-icon {
+    font-size: 80px;
+    margin-bottom: 20px;
+}
+
+.payment-failed-title {
+    color: #dc3545;
+    margin-bottom: 30px;
+}
+
+.payment-details {
+    background: #f8f9fa;
+    padding: 20px;
+    border-radius: 8px;
+    margin-bottom: 30px;
+    text-align: left;
+}
+
+.payment-details div {
+    margin-bottom: 10px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.payment-details .amount {
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.failure-reason {
+    border-top: 1px solid #dee2e6;
+    padding-top: 10px;
+    margin-top: 10px;
+}
+
+.payment-actions {
+    margin-top: 30px;
+}
+
+.payment-actions .btn {
+    margin: 0 5px;
+    min-width: 150px;
+}
+
+@media (max-width: 768px) {
+    .payment-failed-container {
+        margin-top: 20px;
+    }
+    
+    .payment-failed-icon {
+        font-size: 60px;
+    }
+    
+    .payment-actions .btn {
+        display: block;
+        width: 100%;
+        margin: 5px 0;
+    }
+}
+</style>
+{% endblock %}

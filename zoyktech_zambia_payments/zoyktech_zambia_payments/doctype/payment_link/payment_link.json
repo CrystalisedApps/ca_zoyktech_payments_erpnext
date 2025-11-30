@@ -1,0 +1,141 @@
+{
+  "doctype": "DocType",
+  "module": "Zoyktech Zambia Payments",
+  "name": "Payment Link",
+  "autoname": "field:reference_id",
+  "fields": [
+    {
+      "fieldname": "reference_id",
+      "fieldtype": "Data",
+      "label": "Reference ID",
+      "unique": 1,
+      "reqd": 1
+    },
+    {
+      "fieldname": "linked_doctype",
+      "fieldtype": "Link",
+      "label": "Linked DocType",
+      "options": "DocType",
+      "reqd": 1
+    },
+    {
+      "fieldname": "linked_docname",
+      "fieldtype": "Dynamic Link",
+      "label": "Linked Document",
+      "options": "linked_doctype",
+      "reqd": 1
+    },
+    {
+      "fieldname": "payment_transaction",
+      "fieldtype": "Link",
+      "label": "Payment Transaction",
+      "options": "Payment Transaction"
+    },
+    {
+      "fieldname": "amount",
+      "fieldtype": "Currency",
+      "label": "Amount",
+      "reqd": 1
+    },
+    {
+      "fieldname": "currency",
+      "fieldtype": "Select",
+      "label": "Currency",
+      "options": "ZMW\nUSD",
+      "default": "ZMW",
+      "reqd": 1
+    },
+    {
+      "fieldname": "status",
+      "fieldtype": "Select",
+      "label": "Status",
+      "options": "Pending\nPaid\nFailed\nCancelled\nExpired",
+      "default": "Pending",
+      "reqd": 1
+    },
+    {
+      "fieldname": "payment_url",
+      "fieldtype": "Data",
+      "label": "Payment URL"
+    },
+    {
+      "fieldname": "expiry_date",
+      "fieldtype": "Datetime",
+      "label": "Expiry Date"
+    },
+    {
+      "fieldname": "description",
+      "fieldtype": "Text",
+      "label": "Description"
+    },
+    {
+      "fieldname": "section_break_1",
+      "fieldtype": "Section Break",
+      "label": "Customer Details"
+    },
+    {
+      "fieldname": "customer",
+      "fieldtype": "Link",
+      "label": "Customer",
+      "options": "Customer"
+    },
+    {
+      "fieldname": "customer_name",
+      "fieldtype": "Data",
+      "label": "Customer Name"
+    },
+    {
+      "fieldname": "customer_email",
+      "fieldtype": "Data",
+      "label": "Customer Email"
+    },
+    {
+      "fieldname": "customer_phone",
+      "fieldtype": "Data",
+      "label": "Customer Phone"
+    },
+    {
+      "fieldname": "section_break_2",
+      "fieldtype": "Section Break",
+      "label": "Timestamps"
+    },
+    {
+      "fieldname": "creation",
+      "fieldtype": "Datetime",
+      "label": "Created On",
+      "read_only": 1
+    },
+    {
+      "fieldname": "modified",
+      "fieldtype": "Datetime",
+      "label": "Last Modified",
+      "read_only": 1
+    }
+  ],
+  "permissions": [
+    {
+      "create": 1,
+      "delete": 1,
+      "email": 1,
+      "export": 1,
+      "print": 1,
+      "read": 1,
+      "report": 1,
+      "role": "System Manager",
+      "share": 1,
+      "write": 1
+    },
+    {
+      "create": 1,
+      "delete": 0,
+      "email": 1,
+      "export": 1,
+      "print": 1,
+      "read": 1,
+      "report": 1,
+      "role": "Accounts Manager",
+      "share": 1,
+      "write": 1
+    }
+  ]
+}

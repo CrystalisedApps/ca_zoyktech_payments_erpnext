@@ -1,0 +1,233 @@
+/* Payment Integration Styles */
+
+/* Payment Button Styles */
+.btn-create-payment {
+    background-color: #28a745;
+    border-color: #28a745;
+    color: white;
+}
+
+.btn-create-payment:hover {
+    background-color: #218838;
+    border-color: #1e7e34;
+}
+
+.btn-quick-payment {
+    background-color: #17a2b8;
+    border-color: #17a2b8;
+    color: white;
+    margin-left: 5px;
+}
+
+.btn-quick-payment:hover {
+    background-color: #138496;
+    border-color: #117a8b;
+}
+
+/* Payment Status Badges */
+.payment-status-badge {
+    font-size: 12px;
+    padding: 4px 8px;
+    border-radius: 12px;
+}
+
+.status-completed {
+    background-color: #28a745;
+    color: white;
+}
+
+.status-pending {
+    background-color: #ffc107;
+    color: #212529;
+}
+
+.status-failed {
+    background-color: #dc3545;
+    color: white;
+}
+
+.status-cancelled {
+    background-color: #6c757d;
+    color: white;
+}
+
+/* Payment Link Items */
+.payment-link-item {
+    padding: 12px;
+    margin-bottom: 8px;
+    border: 1px solid #e0e0e0;
+    border-radius: 5px;
+    background-color: #f8f9fa;
+    transition: all 0.3s ease;
+}
+
+.payment-link-item:hover {
+    background-color: #e9ecef;
+    border-color: #28a745;
+}
+
+.payment-link-item .row {
+    align-items: center;
+}
+
+/* Payment Forms */
+.payment-form-container {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.payment-method-option {
+    border: 2px solid #e0e0e0;
+    border-radius: 8px;
+    padding: 15px;
+    margin-bottom: 10px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.payment-method-option:hover {
+    border-color: #28a745;
+    background-color: #f8fff9;
+}
+
+.payment-method-option.selected {
+    border-color: #28a745;
+    background-color: #e8f5e8;
+}
+
+.payment-method-option .form-check-input {
+    margin-top: 0.3rem;
+}
+
+/* QR Code Styling */
+.qr-code-container {
+    text-align: center;
+    padding: 20px;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+/* Payment Dashboard */
+.payment-dashboard-card {
+    background: white;
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.payment-stat-number {
+    font-size: 2rem;
+    font-weight: bold;
+    color: #28a745;
+}
+
+.payment-stat-label {
+    font-size: 0.9rem;
+    color: #6c757d;
+    text-transform: uppercase;
+}
+
+/* Payment History Table */
+.payment-history-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.payment-history-table th {
+    background-color: #f8f9fa;
+    padding: 12px;
+    text-align: left;
+    font-weight: bold;
+    border-bottom: 2px solid #dee2e6;
+}
+
+.payment-history-table td {
+    padding: 12px;
+    border-bottom: 1px solid #dee2e6;
+}
+
+.payment-history-table tr:hover {
+    background-color: #f8f9fa;
+}
+
+/* Mobile Responsive */
+@media (max-width: 768px) {
+    .payment-link-item .row {
+        font-size: 0.9rem;
+    }
+    
+    .payment-stat-number {
+        font-size: 1.5rem;
+    }
+    
+    .btn-quick-payment {
+        display: block;
+        margin: 5px 0;
+        width: 100%;
+    }
+}
+
+/* Animation for payment processing */
+@keyframes paymentProcessing {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+.payment-processing {
+    animation: paymentProcessing 2s linear infinite;
+}
+
+/* Custom alerts */
+.payment-alert-success {
+    border-left: 4px solid #28a745;
+}
+
+.payment-alert-warning {
+    border-left: 4px solid #ffc107;
+}
+
+.payment-alert-error {
+    border-left: 4px solid #dc3545;
+}
+
+/* Payment method icons */
+.payment-method-icon {
+    width: 24px;
+    height: 24px;
+    margin-right: 8px;
+    vertical-align: middle;
+}
+
+/* Form enhancements */
+.payment-form-group {
+    margin-bottom: 1.5rem;
+}
+
+.payment-form-label {
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    color: #495057;
+}
+
+/* Loading states */
+.payment-loading {
+    opacity: 0.6;
+    pointer-events: none;
+}
+
+.payment-loading::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 20px;
+    height: 20px;
+    margin: -10px 0 0 -10px;
+    border: 2px solid #f3f3f3;
+    border-top: 2px solid #28a745;
+    border-radius: 50%;
+    animation: paymentProcessing 1s linear infinite;
+}

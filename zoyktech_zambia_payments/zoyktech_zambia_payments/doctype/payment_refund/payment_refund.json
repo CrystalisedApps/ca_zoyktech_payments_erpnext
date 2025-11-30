@@ -1,0 +1,111 @@
+{
+  "doctype": "DocType",
+  "module": "Zoyktech Zambia Payments",
+  "name": "Payment Refund",
+  "is_single": 0,
+  "autoname": "format:REF-{YYYY}-{MM}-{#####}",
+  "fields": [
+    {
+      "fieldname": "payment_reference",
+      "fieldtype": "Link",
+      "label": "Payment Reference",
+      "options": "Payment Transaction",
+      "reqd": 1
+    },
+    {
+      "fieldname": "refund_amount",
+      "fieldtype": "Currency",
+      "label": "Refund Amount",
+      "reqd": 1
+    },
+    {
+      "fieldname": "original_amount",
+      "fieldtype": "Currency",
+      "label": "Original Amount",
+      "reqd": 1
+    },
+    {
+      "fieldname": "currency",
+      "fieldtype": "Select",
+      "label": "Currency",
+      "options": "ZMW\nUSD",
+      "default": "ZMW",
+      "reqd": 1
+    },
+    {
+      "fieldname": "reason",
+      "fieldtype": "Select",
+      "label": "Refund Reason",
+      "options": "Customer Request\nDuplicate Payment\nService Not Provided\nTechnical Error\nFraudulent Transaction\nOther",
+      "reqd": 1
+    },
+    {
+      "fieldname": "reason_description",
+      "fieldtype": "Text",
+      "label": "Reason Description"
+    },
+    {
+      "fieldname": "status",
+      "fieldtype": "Select",
+      "label": "Status",
+      "options": "Pending\nProcessing\nCompleted\nFailed\nCancelled",
+      "default": "Pending",
+      "reqd": 1
+    },
+    {
+      "fieldname": "transaction_id",
+      "fieldtype": "Data",
+      "label": "Refund Transaction ID"
+    },
+    {
+      "fieldname": "gateway_response",
+      "fieldtype": "Code",
+      "label": "Gateway Response"
+    },
+    {
+      "fieldname": "section_break_1",
+      "fieldtype": "Section Break",
+      "label": "Customer Details"
+    },
+    {
+      "fieldname": "customer_email",
+      "fieldtype": "Data",
+      "label": "Customer Email"
+    },
+    {
+      "fieldname": "customer_phone",
+      "fieldtype": "Data",
+      "label": "Customer Phone"
+    },
+    {
+      "fieldname": "refund_initiated_by",
+      "fieldtype": "Link",
+      "label": "Initiated By",
+      "options": "User"
+    },
+    {
+      "fieldname": "refund_initiated_date",
+      "fieldtype": "Datetime",
+      "label": "Initiated Date"
+    },
+    {
+      "fieldname": "refund_completed_date",
+      "fieldtype": "Datetime",
+      "label": "Completed Date"
+    }
+  ],
+  "permissions": [
+    {
+      "create": 1,
+      "delete": 1,
+      "email": 1,
+      "export": 1,
+      "print": 1,
+      "read": 1,
+      "report": 1,
+      "role": "Accounts Manager",
+      "share": 1,
+      "write": 1
+    }
+  ]
+}

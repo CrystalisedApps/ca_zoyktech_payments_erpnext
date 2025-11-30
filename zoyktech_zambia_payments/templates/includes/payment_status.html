@@ -1,0 +1,224 @@
+{% macro render_payment_status(reference_id, show_actions=True) %}
+<div class="payment-status-widget" data-reference="{{ reference_id }}">
+    <div class="payment-status-header">
+        <h6>{{ _("Payment Status") }}</h6>
+        <button class="btn btn-sm btn-outline-secondary btn-refresh-status">
+            <i class="fa fa-refresh"></i>
+        </button>
+    </div>
+    
+    <div class="payment-status-content">
+        <div class="status-loading" style="display: none;">
+            <div class="spinner-border spinner-border-sm" role="status">
+                <span class="sr-only">{{ _("Loading...") }}</span>
+            </div>
+            {{ _("Checking status...") }}
+        </div>
+        
+        <div class="status-display">
+            <!-- Status will be loaded here -->
+        </div>
+    </div>
+    
+    {% if show_actions %}
+    <div class="payment-status-actions">
+        <button class="btn btn-sm btn-primary btn-view-details" style="display: none;">
+            <i class="fa fa-eye"></i> {{ _("View Details") }}
+        </button>
+        
+        <button class="btn btn-sm btn-warning btn-retry-payment" style="display: none;">
+            <i class="fa fa-refresh"></i> {{ _("Try Again") }}
+        </button>
+    </div>
+    {% endif %}
+</div>
+
+<script>
+frappe.ready(function() {
+    function loadPaymentStatus(referenceId) {
+        const $widget = $(`.payment-status-widget[data-reference="${referenceId}"]`);
+        const $loading = $widget.find('.status-loading');
+        const $display = $widget.find('.status-display');
+        
+        $loading.show();
+        $display.hide();
+        
+        frappe.call({
+            method: 'zoyktech_zambia_payments.zoyktech_zambia_payments.api.routes.get_payment_status',
+            args: {
+                reference_id: referenceId
+            },
+            callback: function(response) {
+                $loading.hide();
+                $display.show();
+                
+                if (response.message.success) {
+                    renderStatus($display, response.message);
+                    updateActions($widget, response.message.status);
+                } else {
+                    $display.html(`
+                        <div class="alert alert-danger">
+                            <i class="fa fa-exclamation-triangle"></i>
+                            {{ _("Error loading payment status") }}
+                        </div>
+                    `);
+                }
+            }
+        });
+    }
+    
+    function renderStatus($container, data) {
+        const status = data.status;
+        const statusClass = getStatusClass(status);
+        const statusIcon = getStatusIcon(status);
+        
+        const html = `
+            <div class="payment-status-badge badge badge-${statusClass}">
+                <i class="fa ${statusIcon}"></i>
+                ${status}
+            </div>
+            
+            ${data.transaction_id ? `
+            <div class="transaction-info">
+                <small class="text-muted">{{ _("Transaction ID:") }}</small>
+                <br>
+                <code>${data.transaction_id}</code>
+            </div>
+            ` : ''}
+            
+            ${data.payment_completed ? `
+            <div class="completion-time">
+                <small class="text-muted">{{ _("Completed:") }}</small>
+                <br>
+                <small>${frappe.datetime.str_to_user(data.payment_completed)}</small>
+            </div>
+            ` : ''}
+        `;
+        
+        $container.html(html);
+    }
+    
+    function getStatusClass(status) {
+        const classes = {
+            'Completed': 'success',
+            'Pending': 'warning',
+            'Failed': 'danger',
+            'Cancelled': 'secondary',
+            'Refunded': 'info'
+        };
+        return classes[status] || 'secondary';
+    }
+    
+    function getStatusIcon(status) {
+        const icons = {
+            'Completed': 'fa-check-circle',
+            'Pending': 'fa-clock-o',
+            'Failed': 'fa-times-circle',
+            'Cancelled': 'fa-ban',
+            'Refunded': 'fa-undo'
+        };
+        return icons[status] || 'fa-question-circle';
+    }
+    
+    function updateActions($widget, status) {
+        const $viewBtn = $widget.find('.btn-view-details');
+        const $retryBtn = $widget.find('.btn-retry-payment');
+        
+        $viewBtn.show();
+        
+        if (status === 'Failed') {
+            $retryBtn.show();
+        } else {
+            $retryBtn.hide();
+        }
+    }
+    
+    // Initialize for all payment status widgets
+    $('.payment-status-widget').each(function() {
+        const referenceId = $(this).data('reference');
+        loadPaymentStatus(referenceId);
+    });
+    
+    // Refresh button
+    $('.btn-refresh-status').click(function() {
+        const referenceId = $(this).closest('.payment-status-widget').data('reference');
+        loadPaymentStatus(referenceId);
+    });
+    
+    // View details button
+    $('.btn-view-details').click(function() {
+        const referenceId = $(this).closest('.payment-status-widget').data('reference');
+        frappe.set_route('Form', 'Payment Transaction', referenceId);
+    });
+    
+    // Retry payment button
+    $('.btn-retry-payment').click(function() {
+        const referenceId = $(this).closest('.payment-status-widget').data('reference');
+        frappe.confirm(
+            '{{ _("Create a new payment request for this transaction?") }}',
+            function() {
+                // Implementation for retry payment
+                frappe.msgprint('{{ _("Retry payment functionality would be implemented here") }}');
+            }
+        );
+    });
+});
+</script>
+
+<style>
+.payment-status-widget {
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    padding: 15px;
+    background: white;
+}
+
+.payment-status-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+    border-bottom: 1px solid #f0f0f0;
+    padding-bottom: 10px;
+}
+
+.payment-status-header h6 {
+    margin: 0;
+    color: #495057;
+}
+
+.payment-status-content {
+    min-height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.status-loading {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: #6c757d;
+}
+
+.payment-status-badge {
+    font-size: 14px;
+    padding: 8px 12px;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.transaction-info, .completion-time {
+    margin-top: 10px;
+    text-align: center;
+}
+
+.payment-status-actions {
+    margin-top: 15px;
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+}
+</style>
+{% endmacro %}

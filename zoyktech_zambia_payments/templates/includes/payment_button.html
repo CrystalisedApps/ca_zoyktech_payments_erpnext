@@ -1,0 +1,156 @@
+{% macro render_payment_button(doctype, docname, amount, currency, description=None) %}
+<div class="payment-button-wrapper">
+    <button class="btn btn-primary btn-payment-request"
+            data-doctype="{{ doctype }}"
+            data-docname="{{ docname }}"
+            data-amount="{{ amount }}"
+            data-currency="{{ currency }}"
+            data-description="{{ description or '' }}">
+        <i class="fa fa-credit-card"></i>
+        {{ _("Pay") }} {{ amount }} {{ currency }}
+    </button>
+    
+    <div class="payment-methods-dropdown" style="display: none;">
+        <div class="dropdown-menu payment-methods-menu">
+            <h6 class="dropdown-header">{{ _("Select Payment Method") }}</h6>
+            
+            <a class="dropdown-item payment-method-option" href="#" data-method="mtn">
+                <i class="fa fa-mobile text-primary"></i>
+                {{ _("MTN Mobile Money") }}
+            </a>
+            
+            <a class="dropdown-item payment-method-option" href="#" data-method="airtel">
+                <i class="fa fa-mobile text-danger"></i>
+                {{ _("Airtel Money") }}
+            </a>
+            
+            <a class="dropdown-item payment-method-option" href="#" data-method="card">
+                <i class="fa fa-credit-card text-info"></i>
+                {{ _("Credit/Debit Card") }}
+            </a>
+            
+            <a class="dropdown-item payment-method-option" href="#" data-method="bank">
+                <i class="fa fa-university text-success"></i>
+                {{ _("Bank Transfer") }}
+            </a>
+        </div>
+    </div>
+</div>
+
+<script>
+frappe.ready(function() {
+    $('.btn-payment-request').click(function() {
+        const $btn = $(this);
+        const doctype = $btn.data('doctype');
+        const docname = $btn.data('docname');
+        const amount = $btn.data('amount');
+        const currency = $btn.data('currency');
+        const description = $btn.data('description');
+        
+        // Show payment methods dropdown
+        const $dropdown = $btn.next('.payment-methods-dropdown');
+        $dropdown.show();
+        
+        // Handle payment method selection
+        $dropdown.find('.payment-method-option').click(function(e) {
+            e.preventDefault();
+            const method = $(this).data('method');
+            $dropdown.hide();
+            
+            // Create payment request
+            createPaymentRequest(doctype, docname, amount, currency, method, description);
+        });
+        
+        // Close dropdown when clicking outside
+        $(document).click(function(e) {
+            if (!$btn.is(e.target) && !$dropdown.is(e.target) && $dropdown.has(e.target).length === 0) {
+                $dropdown.hide();
+            }
+        });
+    });
+    
+    function createPaymentRequest(doctype, docname, amount, currency, method, description) {
+        frappe.call({
+            method: 'zoyktech_zambia_payments.zoyktech_zambia_payments.api.routes.create_payment',
+            args: {
+                doctype: doctype,
+                docname: docname,
+                payment_method: method,
+                amount: amount,
+                currency: currency,
+                description: description
+            },
+            callback: function(response) {
+                if (response.message.success) {
+                    if (response.message.payment_url) {
+                        // Redirect to payment page
+                        window.open(response.message.payment_url, '_blank');
+                    } else {
+                        frappe.msgprint({
+                            title: __('Payment Created'),
+                            indicator: 'green',
+                            message: __('Payment request created successfully. Reference: {0}', [response.message.reference_id])
+                        });
+                    }
+                } else {
+                    frappe.msgprint({
+                        title: __('Payment Error'),
+                        indicator: 'red',
+                        message: response.message.message || __('Failed to create payment request')
+                    });
+                }
+            }
+        });
+    }
+});
+</script>
+
+<style>
+.payment-button-wrapper {
+    position: relative;
+    display: inline-block;
+}
+
+.btn-payment-request {
+    background: linear-gradient(45deg, #28a745, #20c997);
+    border: none;
+    padding: 12px 24px;
+    font-weight: 600;
+    border-radius: 6px;
+    transition: all 0.3s ease;
+}
+
+.btn-payment-request:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(40, 167, 69, 0.3);
+}
+
+.payment-methods-menu {
+    min-width: 200px;
+    padding: 10px 0;
+}
+
+.payment-methods-menu .dropdown-header {
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    color: #6c757d;
+}
+
+.payment-method-option {
+    padding: 8px 15px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.payment-method-option:hover {
+    background-color: #f8f9fa;
+}
+
+.payment-method-option i {
+    width: 20px;
+    text-align: center;
+}
+</style>
+{% endmacro %}

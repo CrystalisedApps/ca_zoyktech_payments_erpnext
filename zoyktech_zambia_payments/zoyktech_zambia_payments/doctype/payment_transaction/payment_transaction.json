@@ -1,0 +1,127 @@
+{
+  "doctype": "DocType",
+  "module": "Zoyktech Zambia Payments",
+  "name": "Payment Transaction",
+  "autoname": "field:reference_id",
+  "fields": [
+    {
+      "fieldname": "reference_id",
+      "fieldtype": "Data",
+      "label": "Reference ID",
+      "unique": 1,
+      "reqd": 1
+    },
+    {
+      "fieldname": "amount",
+      "fieldtype": "Currency",
+      "label": "Amount",
+      "reqd": 1
+    },
+    {
+      "fieldname": "currency",
+      "fieldtype": "Select",
+      "label": "Currency",
+      "options": "ZMW\nUSD",
+      "default": "ZMW",
+      "reqd": 1
+    },
+    {
+      "fieldname": "status",
+      "fieldtype": "Select",
+      "label": "Status",
+      "options": "Pending\nCompleted\nFailed\nRefunded\nCancelled",
+      "default": "Pending",
+      "reqd": 1
+    },
+    {
+      "fieldname": "payment_method",
+      "fieldtype": "Select",
+      "label": "Payment Method",
+      "options": "MTN Mobile Money\nAirtel Money\nCard Payment\nBank Transfer"
+    },
+    {
+      "fieldname": "customer_email",
+      "fieldtype": "Data",
+      "label": "Customer Email"
+    },
+    {
+      "fieldname": "customer_phone",
+      "fieldtype": "Data",
+      "label": "Customer Phone"
+    },
+    {
+      "fieldname": "transaction_id",
+      "fieldtype": "Data",
+      "label": "Transaction ID"
+    },
+    {
+      "fieldname": "failure_reason",
+      "fieldtype": "Text",
+      "label": "Failure Reason"
+    },
+    {
+      "fieldname": "gateway_response",
+      "fieldtype": "Code",
+      "label": "Gateway Response",
+      "options": "JSON"
+    },
+    {
+      "fieldname": "section_break_1",
+      "fieldtype": "Section Break",
+      "label": "Timestamps"
+    },
+    {
+      "fieldname": "payment_initiated",
+      "fieldtype": "Datetime",
+      "label": "Payment Initiated"
+    },
+    {
+      "fieldname": "payment_completed",
+      "fieldtype": "Datetime",
+      "label": "Payment Completed"
+    },
+    {
+      "fieldname": "section_break_2",
+      "fieldtype": "Section Break",
+      "label": "Linked Documents"
+    },
+    {
+      "fieldname": "linked_sales_invoice",
+      "fieldtype": "Link",
+      "label": "Linked Sales Invoice",
+      "options": "Sales Invoice"
+    },
+    {
+      "fieldname": "linked_payment_entry",
+      "fieldtype": "Link",
+      "label": "Linked Payment Entry",
+      "options": "Payment Entry"
+    }
+  ],
+  "permissions": [
+    {
+      "create": 1,
+      "delete": 1,
+      "email": 1,
+      "export": 1,
+      "print": 1,
+      "read": 1,
+      "report": 1,
+      "role": "System Manager",
+      "share": 1,
+      "write": 1
+    },
+    {
+      "create": 1,
+      "delete": 0,
+      "email": 1,
+      "export": 1,
+      "print": 1,
+      "read": 1,
+      "report": 1,
+      "role": "Accounts Manager",
+      "share": 1,
+      "write": 1
+    }
+  ]
+}

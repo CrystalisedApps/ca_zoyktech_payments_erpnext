@@ -1,0 +1,82 @@
+[
+  {
+    "name": "Sales Invoice-custom_payment_link_section",
+    "docstatus": 0,
+    "doctype": "Custom Field",
+    "dt": "Sales Invoice",
+    "fieldname": "custom_payment_link_section",
+    "fieldtype": "Section Break",
+    "hidden": 0,
+    "insert_after": "payment_terms_section",
+    "label": "Payment Links"
+  },
+  {
+    "name": "Sales Invoice-custom_payment_links",
+    "docstatus": 0,
+    "doctype": "Custom Field",
+    "dt": "Sales Invoice",
+    "fieldname": "custom_payment_links",
+    "fieldtype": "HTML",
+    "hidden": 0,
+    "insert_after": "custom_payment_link_section",
+    "label": "Payment Links"
+  },
+  {
+    "name": "Sales Invoice-custom_payment_status",
+    "docstatus": 0,
+    "doctype": "Custom Field",
+    "dt": "Sales Invoice",
+    "fieldname": "custom_payment_status",
+    "fieldtype": "Data",
+    "hidden": 1,
+    "insert_after": "custom_payment_links",
+    "label": "Payment Status",
+    "read_only": 1
+  },
+  {
+    "name": "Payment Entry-custom_gateway_reference",
+    "docstatus": 0,
+    "doctype": "Custom Field",
+    "dt": "Payment Entry",
+    "fieldname": "custom_gateway_reference",
+    "fieldtype": "Data",
+    "hidden": 0,
+    "insert_after": "reference_no",
+    "label": "Gateway Reference",
+    "read_only": 1
+  },
+  {
+    "name": "Payment Entry-custom_payment_method",
+    "docstatus": 0,
+    "doctype": "Custom Field",
+    "dt": "Payment Entry",
+    "fieldname": "custom_payment_method",
+    "fieldtype": "Data",
+    "hidden": 0,
+    "insert_after": "mode_of_payment",
+    "label": "Payment Method",
+    "read_only": 1
+  },
+  {
+    "name": "Customer-custom_payment_history_section",
+    "docstatus": 0,
+    "doctype": "Custom Field",
+    "dt": "Customer",
+    "fieldname": "custom_payment_history_section",
+    "fieldtype": "Section Break",
+    "hidden": 0,
+    "insert_after": "payment_terms",
+    "label": "Payment History"
+  },
+  {
+    "name": "Customer-custom_payment_history",
+    "docstatus": 0,
+    "doctype": "Custom Field",
+    "dt": "Customer",
+    "fieldname": "custom_payment_history",
+    "fieldtype": "HTML",
+    "hidden": 0,
+    "insert_after": "custom_payment_history_section",
+    "label": "Payment History"
+  }
+]

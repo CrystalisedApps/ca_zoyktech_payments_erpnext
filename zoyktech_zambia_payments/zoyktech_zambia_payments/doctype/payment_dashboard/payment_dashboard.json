@@ -1,0 +1,48 @@
+{
+  "doctype": "DocType",
+  "module": "Zoyktech Zambia Payments",
+  "name": "Payment Dashboard",
+  "is_single": 1,
+  "issingle": 1,
+  "fields": [
+    {
+      "fieldname": "total_collections",
+      "fieldtype": "Currency",
+      "label": "Total Collections",
+      "read_only": 1
+    },
+    {
+      "fieldname": "successful_payments",
+      "fieldtype": "Int",
+      "label": "Successful Payments",
+      "read_only": 1
+    },
+    {
+      "fieldname": "failed_payments",
+      "fieldtype": "Int",
+      "label": "Failed Payments",
+      "read_only": 1
+    },
+    {
+      "fieldname": "pending_payments",
+      "fieldtype": "Int",
+      "label": "Pending Payments",
+      "read_only": 1
+    },
+    {
+      "fieldname": "dashboard_html",
+      "fieldtype": "HTML",
+      "label": "Dashboard"
+    }
+  ],
+  "permissions": [
+    {
+      "role": "System Manager",
+      "read": 1
+    },
+    {
+      "role": "Accounts Manager",
+      "read": 1
+    }
+  ]
+}

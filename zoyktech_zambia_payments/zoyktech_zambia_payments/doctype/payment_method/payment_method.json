@@ -1,0 +1,97 @@
+{
+  "doctype": "DocType",
+  "module": "Zoyktech Zambia Payments",
+  "name": "Payment Method",
+  "is_single": 0,
+  "istable": 1,
+  "autoname": "field:payment_method",
+  "fields": [
+    {
+      "fieldname": "payment_method",
+      "fieldtype": "Select",
+      "label": "Payment Method",
+      "options": "MTN Mobile Money\nAirtel Money\nVisa Card\nMasterCard\nBank Transfer\nZanaco\nStanbic\nFNB",
+      "reqd": 1,
+      "unique": 1
+    },
+    {
+      "fieldname": "enabled",
+      "fieldtype": "Check",
+      "label": "Enabled",
+      "default": 1
+    },
+    {
+      "fieldname": "payment_gateway",
+      "fieldtype": "Select",
+      "label": "Payment Gateway",
+      "options": "ZoykTech\nManual\nBank API",
+      "default": "ZoykTech"
+    },
+    {
+      "fieldname": "processing_fee_percentage",
+      "fieldtype": "Float",
+      "label": "Processing Fee (%)",
+      "default": 2.5
+    },
+    {
+      "fieldname": "fixed_fee",
+      "fieldtype": "Currency",
+      "label": "Fixed Fee",
+      "default": 2.0
+    },
+    {
+      "fieldname": "minimum_amount",
+      "fieldtype": "Currency",
+      "label": "Minimum Amount",
+      "default": 1.0
+    },
+    {
+      "fieldname": "maximum_amount",
+      "fieldtype": "Currency",
+      "label": "Maximum Amount",
+      "default": 50000.0
+    },
+    {
+      "fieldname": "icon",
+      "fieldtype": "Data",
+      "label": "Icon Class",
+      "description": "Font Awesome icon class (e.g., fa-mobile, fa-credit-card)"
+    },
+    {
+      "fieldname": "description",
+      "fieldtype": "Text",
+      "label": "Description"
+    },
+    {
+      "fieldname": "section_break_1",
+      "fieldtype": "Section Break",
+      "label": "Gateway Configuration"
+    },
+    {
+      "fieldname": "gateway_method_code",
+      "fieldtype": "Data",
+      "label": "Gateway Method Code",
+      "description": "Code used by payment gateway for this method"
+    },
+    {
+      "fieldname": "test_mode_enabled",
+      "fieldtype": "Check",
+      "label": "Enable in Test Mode",
+      "default": 1
+    }
+  ],
+  "permissions": [
+    {
+      "create": 1,
+      "delete": 1,
+      "email": 1,
+      "export": 1,
+      "print": 1,
+      "read": 1,
+      "report": 1,
+      "role": "System Manager",
+      "share": 1,
+      "write": 1
+    }
+  ]
+}
