@@ -4,29 +4,13 @@
   "name": "Payment Dashboard",
   "is_single": 1,
   "issingle": 1,
+  "autoname": "field:title",
   "fields": [
     {
-      "fieldname": "total_collections",
-      "fieldtype": "Currency",
-      "label": "Total Collections",
-      "read_only": 1
-    },
-    {
-      "fieldname": "successful_payments",
-      "fieldtype": "Int",
-      "label": "Successful Payments",
-      "read_only": 1
-    },
-    {
-      "fieldname": "failed_payments",
-      "fieldtype": "Int",
-      "label": "Failed Payments",
-      "read_only": 1
-    },
-    {
-      "fieldname": "pending_payments",
-      "fieldtype": "Int",
-      "label": "Pending Payments",
+      "fieldname": "title",
+      "fieldtype": "Data",
+      "label": "Title",
+      "default": "Payment Dashboard",
       "read_only": 1
     },
     {
@@ -37,11 +21,17 @@
   ],
   "permissions": [
     {
-      "role": "System Manager",
-      "read": 1
+      "role": "Administrator",
+      "read": 1,
+      "write": 1
     },
     {
-      "role": "Accounts Manager",
+      "role": "Administrator",
+      "read": 1,
+      "write": 1
+    },
+    {
+      "role": "Administrator",
       "read": 1
     }
   ]

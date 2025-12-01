@@ -25,12 +25,21 @@ app_license = "mit"
 # 	}
 # ]
 
+doctype = ["Payment Dashboard", "Payment Transaction"] 
+
 # Includes in <head>
 # ------------------
 
 # include js, css files in header of desk.html
-app_include_css = ["/assets/zoyktech_zambia_payments/css/payment_buttons.css", "/assets/zoyktech_zambia_payments/css/payment_forms.css"]
-app_include_js = ["/assets/zoyktech_zambia_payments/js/payment_integration.js", "/assets/zoyktech_zambia_payments/js/payment_buttons.js"]
+app_include_css = [
+    "/assets/zoyktech_zambia_payments/css/payment_buttons.css",
+    "/assets/zoyktech_zambia_payments/css/payment_forms.css",
+    # "/assets/zoyktech_zambia_payments/css/payment_dashboard.css"
+]
+app_include_js = [
+    "/assets/zoyktech_zambia_payments/js/payment_integration.js",
+    "/assets/zoyktech_zambia_payments/js/payment_buttons.js"
+]
 
 # include js, css files in header of web template
 web_include_css = ["/assets/zoyktech_zambia_payments/css/payment_forms.css"]
@@ -53,7 +62,8 @@ doctype_js = {
     "Sales Invoice": "public/js/sales_invoice_payments.js",
     "Purchase Invoice": "public/js/purchase_invoice_payments.js",
     "Sales Order": "public/js/sales_order_payments.js",
-    "Payment Entry": "public/js/payment_entry_enhancements.js"
+    "Payment Entry": "public/js/payment_entry_enhancements.js",
+    "Payment Dashboard": "public/js/payment_dashboard.js"
 }
 
 # Svg Icons
@@ -153,6 +163,9 @@ doc_events = {
     "Payment Entry": {
         "on_submit": "zoyktech_zambia_payments.zoyktech_zambia_payments.utils.payment_handlers.update_payment_gateway_status",
         "on_cancel": "zoyktech_zambia_payments.zoyktech_zambia_payments.utils.payment_handlers.handle_payment_cancellation"
+    },
+    "Payment Dashboard": {  # ADD THIS SECTION
+        "on_update": "zoyktech_zambia_payments.zoyktech_zambia_payments.doctype.payment_dashboard.payment_dashboard.PaymentDashboard.update_dashboard_stats"
     }
 }
 
@@ -165,7 +178,8 @@ scheduler_events = {
         "zoyktech_zambia_payments.zoyktech_zambia_payments.utils.scheduled_tasks.send_payment_reports"
     ],
     "hourly": [
-        "zoyktech_zambia_payments.zoyktech_zambia_payments.utils.scheduled_tasks.check_pending_payments"
+        "zoyktech_zambia_payments.zoyktech_zambia_payments.utils.scheduled_tasks.check_pending_payments",
+        "zoyktech_zambia_payments.zoyktech_zambia_payments.doctype.payment_dashboard.payment_dashboard.refresh_dashboard_cache"  # ADD THIS LINE
     ],
     "monthly": [
         "zoyktech_zambia_payments.zoyktech_zambia_payments.utils.scheduled_tasks.cleanup_old_payments"
@@ -286,4 +300,3 @@ website_route_rules = [
 # default_log_clearing_doctypes = {
 # 	"Logging DocType Name": 30  # days to retain logs
 # }
-
