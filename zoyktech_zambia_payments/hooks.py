@@ -1,3 +1,5 @@
+# hooks.py
+
 from . import __version__ as app_version
 
 app_name = "zoyktech_zambia_payments"
@@ -164,8 +166,12 @@ doc_events = {
         "on_submit": "zoyktech_zambia_payments.zoyktech_zambia_payments.utils.payment_handlers.update_payment_gateway_status",
         "on_cancel": "zoyktech_zambia_payments.zoyktech_zambia_payments.utils.payment_handlers.handle_payment_cancellation"
     },
-    "Payment Dashboard": {  # ADD THIS SECTION
+    "Payment Dashboard": { 
         "on_update": "zoyktech_zambia_payments.zoyktech_zambia_payments.doctype.payment_dashboard.payment_dashboard.PaymentDashboard.update_dashboard_stats"
+    },
+    "Subscription": {
+        "on_submit": "zoyktech_zambia_payments.zoyktech_zambia_payments.utils.subscription_events.on_subscription_submit",
+        "on_update": "zoyktech_zambia_payments.zoyktech_zambia_payments.utils.subscription_events.on_subscription_update"
     }
 }
 
@@ -175,11 +181,13 @@ doc_events = {
 scheduler_events = {
     "daily": [
         "zoyktech_zambia_payments.zoyktech_zambia_payments.utils.scheduled_tasks.reconcile_pending_payments",
-        "zoyktech_zambia_payments.zoyktech_zambia_payments.utils.scheduled_tasks.send_payment_reports"
+        "zoyktech_zambia_payments.zoyktech_zambia_payments.utils.scheduled_tasks.send_payment_reports",
+        "zoyktech_zambia_payments.zoyktech_zambia_payments.utils.subscription_scheduler.process_due_subscriptions",
     ],
     "hourly": [
         "zoyktech_zambia_payments.zoyktech_zambia_payments.utils.scheduled_tasks.check_pending_payments",
-        "zoyktech_zambia_payments.zoyktech_zambia_payments.doctype.payment_dashboard.payment_dashboard.refresh_dashboard_cache"  # ADD THIS LINE
+        "zoyktech_zambia_payments.zoyktech_zambia_payments.doctype.payment_dashboard.payment_dashboard.refresh_dashboard_cache",
+         "zoyktech_zambia_payments.zoyktech_zambia_payments.utils.subscription_scheduler.check_pending_subscription_payments"
     ],
     "monthly": [
         "zoyktech_zambia_payments.zoyktech_zambia_payments.utils.scheduled_tasks.cleanup_old_payments"
@@ -218,16 +226,13 @@ fixtures = [
     {
         "dt": "Custom Field", 
         "filters": [
-            ["name", "in", [
-                "Sales Invoice-custom_payment_link",
-                "Sales Invoice-custom_payment_status",
-                "Payment Entry-custom_gateway_reference"
-            ]]
+            ["module", "=", "Zoyktech Zambia Payments"]
         ]
     },
     {"dt": "Property Setter"},
     {"dt": "Client Script"},
-    {"dt": "Server Script"}
+    {"dt": "Server Script"},
+    {"dt": "DocType"}  # This will export your custom doctypes
 ]
 
 # Website Route Rules

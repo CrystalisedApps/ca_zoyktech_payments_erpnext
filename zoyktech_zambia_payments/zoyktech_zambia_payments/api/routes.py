@@ -1,7 +1,11 @@
+# routes.py
+
 from frappe import whitelist
 import frappe
 from .payment_integration import PaymentIntegration
 from .zoyktech_client import ZoykTechClient
+from ..utils.subscription_payment_handler import SubscriptionPaymentHandler
+
 
 @whitelist(allow_guest=True)
 def get_payment_methods():
@@ -68,4 +72,56 @@ def payment_failure_page(reference_id):
         return {
             "success": False,
             "error": str(e)
+        }
+
+# Subscription Payment Routes        
+@whitelist()
+def create_subscription_payment(subscription_name):
+    """API endpoint to create subscription payment"""
+    handler = SubscriptionPaymentHandler()
+    return handler.create_immediate_subscription_payment(subscription_name)
+
+@whitelist()
+def get_subscription_payment_status(subscription_name):
+    """Get payment status for a subscription"""
+    subscription = frappe.get_doc("Subscription", subscription_name)
+    
+    if not subscription.custom_payment_reference:
+        return {"success": False, "message": "No payment reference found"}
+    
+    integration = PaymentIntegration()
+    return integration.get_payment_status(subscription.custom_payment_reference)
+
+@whitelist()
+def retry_subscription_payment(subscription_name):
+    """Retry failed subscription payment"""
+    handler = SubscriptionPaymentHandler()
+    return handler.create_immediate_subscription_payment(subscription_name)
+
+@whitelist()
+def cancel_subscription_payment(subscription_name):
+    """Cancel pending subscription payment"""
+    try:
+        subscription = frappe.get_doc("Subscription", subscription_name)
+        
+        if not subscription.custom_payment_link:
+            return {"success": False, "message": "No active payment link found"}
+        
+        payment_link = frappe.get_doc("Payment Link", subscription.custom_payment_link)
+        payment_link.status = "Cancelled"
+        payment_link.save(ignore_permissions=True)
+        
+        subscription.custom_payment_status = "Cancelled"
+        subscription.save(ignore_permissions=True)
+        
+        return {
+            "success": True,
+            "message": _("Subscription payment cancelled successfully")
+        }
+        
+    except Exception as e:
+        return {
+            "success": False,
+            "error": str(e),
+            "message": _("Failed to cancel subscription payment")
         }

@@ -1,3 +1,5 @@
+# payment_gateway_settings.py
+
 import frappe
 from frappe.model.document import Document
 from frappe import _

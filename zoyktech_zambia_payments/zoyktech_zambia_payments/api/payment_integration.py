@@ -1,3 +1,5 @@
+# payment_integration.py
+
 import frappe
 from frappe import _
 from typing import Dict, Optional, List
@@ -447,3 +449,91 @@ class PaymentIntegration:
                 "error": str(e),
                 "message": _("Failed to cancel payment request")
             }
+            
+    # Subscription payment methods
+# Add these methods to your existing PaymentIntegration class
+
+def create_subscription_payment(self, subscription_name):
+    """
+    Special method for creating subscription payments
+    Uses existing payment infrastructure but tailored for subscriptions
+    """
+    try:
+        # Get subscription
+        subscription = frappe.get_doc("Subscription", subscription_name)
+        
+        # Create payment request using existing infrastructure
+        payment_response = self.create_payment_request(
+            doctype="Subscription",
+            docname=subscription_name,
+            payment_method=subscription.payment_method,
+            callback_url=self.get_subscription_callback_url(subscription_name)
+        )
+        
+        return payment_response
+        
+    except Exception as e:
+        frappe.log_error(f"Error creating subscription payment: {str(e)}", "Subscription Payment Error")
+        raise
+
+def get_subscription_callback_url(self, subscription_name):
+    """Get callback URL for subscription payments"""
+    site_url = frappe.utils.get_url()
+    return f"{site_url}/api/method/zoyktech_zambia_payments.zoyktech_zambia_payments.utils.subscription_webhooks.handle_subscription_payment_callback?subscription={subscription_name}"
+
+# Update the update_linked_erpnext_documents method to handle subscriptions
+def update_linked_erpnext_documents(self, reference_id: str, payment_txn):
+    """Update all linked ERPNext documents with payment"""
+    payment_links = frappe.get_all("Payment Link",
+        filters={"reference_id": reference_id, "status": "Paid"},
+        fields=["linked_doctype", "linked_docname"])
+    
+    for link in payment_links:
+        try:
+            if link.linked_doctype == "Sales Invoice":
+                self.update_sales_invoice_payment(link.linked_docname, payment_txn)
+            elif link.linked_doctype == "Purchase Invoice":
+                self.update_purchase_invoice_payment(link.linked_docname, payment_txn)
+            elif link.linked_doctype == "Sales Order":
+                self.update_sales_order_payment(link.linked_docname, payment_txn)
+            elif link.linked_doctype == "Subscription":  # ADD THIS
+                self.update_subscription_payment(link.linked_docname, payment_txn)
+            
+            frappe.db.commit()
+            
+        except Exception as e:
+            frappe.db.rollback()
+            frappe.log_error(f"Error updating {link.linked_doctype} {link.linked_docname}: {str(e)}", "Document Update Error")
+
+def update_subscription_payment(self, subscription_name: str, payment_txn):
+    """Handle subscription payment completion"""
+    try:
+        # Import here to avoid circular imports
+        from ..utils.subscription_payment_handler import SubscriptionPaymentHandler
+        
+        handler = SubscriptionPaymentHandler()
+        
+        # Find the payment link for this subscription and transaction
+        payment_link = frappe.get_value("Payment Link", {
+            "linked_doctype": "Subscription",
+            "linked_docname": subscription_name,
+            "payment_transaction": payment_txn.name
+        }, "name")
+        
+        if payment_link:
+            # Process the successful subscription payment
+            result = handler.process_successful_subscription_payment(
+                subscription_name,
+                payment_link,
+                payment_txn.name
+            )
+            
+            if result.get("success"):
+                frappe.msgprint(_("Subscription payment processed: Invoice {0}, Payment {1}").format(
+                    result.get("sales_invoice"), result.get("payment_entry")))
+            else:
+                frappe.log_error(f"Failed to process subscription payment: {result.get('message')}", "Subscription Payment Error")
+                
+    except Exception as e:
+        frappe.log_error(f"Error updating subscription payment: {str(e)}", "Subscription Payment Error")
+        raise

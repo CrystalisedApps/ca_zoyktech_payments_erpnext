@@ -1,3 +1,9 @@
+// payment_transaction.js
+
+// =============================================
+// FORM VIEW SCRIPT - Payment Transaction
+// =============================================
+
 frappe.ui.form.on("Payment Transaction", {
 	refresh: function (frm) {
 		// Add custom CSS first
