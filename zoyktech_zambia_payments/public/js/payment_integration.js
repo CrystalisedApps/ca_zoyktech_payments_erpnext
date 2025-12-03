@@ -11,30 +11,47 @@ zoyktech_zambia_payments.PaymentIntegration = class {
 	}
 
 	bind_events() {
-		// Bind payment button events
-		$(document).on("click", ".btn-create-payment", this.create_payment.bind(this));
-		$(document).on("click", ".btn-check-payment-status", this.check_payment_status.bind(this));
-		$(document).on("click", ".btn-cancel-payment", this.cancel_payment.bind(this));
+		// Use document ready to ensure DOM is loaded
+		$(document).ready(() => {
+			$(document).on("click", ".btn-create-payment", this.create_payment.bind(this));
+			$(document).on(
+				"click",
+				".btn-check-payment-status",
+				this.check_payment_status.bind(this)
+			);
+			$(document).on("click", ".btn-cancel-payment", this.cancel_payment.bind(this));
+			// Bind dropdown items
+			$(document).on(
+				"click",
+				".payment-methods-dropdown .dropdown-item",
+				this.handle_payment_method_select.bind(this)
+			);
+		});
 	}
 
 	setup_realtime_updates() {
-		// Listen for payment status updates
-		frappe.realtime.on("payment_completed", (data) => {
-			this.handle_payment_completed(data);
-		});
+		// Wait for frappe to be ready
+		if (typeof frappe !== "undefined" && frappe.realtime) {
+			// Listen for payment status updates
+			frappe.realtime.on("payment_completed", (data) => {
+				this.handle_payment_completed(data);
+			});
 
-		frappe.realtime.on("payment_failed", (data) => {
-			this.handle_payment_failed(data);
-		});
+			frappe.realtime.on("payment_failed", (data) => {
+				this.handle_payment_failed(data);
+			});
 
-		frappe.realtime.on("payment_pending", (data) => {
-			this.handle_payment_pending(data);
-		});
+			frappe.realtime.on("payment_pending", (data) => {
+				this.handle_payment_pending(data);
+			});
+		} else {
+			// Try again in 1 second
+			setTimeout(() => this.setup_realtime_updates(), 1000);
+		}
 	}
 
 	create_payment(event) {
 		event.preventDefault();
-
 		const $btn = $(event.currentTarget);
 		const doctype = $btn.data("doctype");
 		const docname = $btn.data("docname");
@@ -52,18 +69,20 @@ zoyktech_zambia_payments.PaymentIntegration = class {
 			args: {
 				doctype: doctype,
 				docname: docname,
-				payment_method: payment_method,
+				payment_method: payment_method || null,
 			},
 			callback: (response) => {
 				$btn.prop("disabled", false).html(__("Create Payment"));
 
-				if (response.message.success) {
+				if (response.message && response.message.success) {
 					this.handle_payment_created(response.message);
 				} else {
 					frappe.msgprint({
 						title: __("Payment Error"),
 						indicator: "red",
-						message: response.message.message || __("Failed to create payment"),
+						message:
+							(response.message && response.message.message) ||
+							__("Failed to create payment"),
 					});
 				}
 			},
@@ -72,6 +91,28 @@ zoyktech_zambia_payments.PaymentIntegration = class {
 				frappe.msgprint(__("Error creating payment"));
 			},
 		});
+	}
+
+	handle_payment_method_select(event) {
+		event.preventDefault();
+		const $item = $(event.currentTarget);
+		const payment_method = $item.data("payment-method");
+		const doctype = $item.data("doctype");
+		const docname = $item.data("docname");
+
+		// Find the associated payment button
+		const $container = $item.closest(".payment-button-container");
+		const $paymentBtn = $container.find(".btn-create-payment");
+
+		// Update button with selected payment method
+		$paymentBtn.data("payment-method", payment_method);
+
+		// Update button text to show selected method
+		const currentText = $paymentBtn.text().split(" - ")[0];
+		$paymentBtn.text(`${currentText} - ${$item.text().trim()}`);
+
+		// Trigger payment creation
+		$paymentBtn.click();
 	}
 
 	handle_payment_created(result) {
@@ -88,13 +129,15 @@ zoyktech_zambia_payments.PaymentIntegration = class {
 			});
 
 			// Start polling for payment status
-			this.start_payment_polling(result.reference_id);
+			if (result.reference_id) {
+				this.start_payment_polling(result.reference_id);
+			}
 		} else {
 			frappe.msgprint({
 				title: __("Payment Created"),
 				indicator: "green",
 				message: __("Payment request created successfully. Reference: {0}", [
-					result.reference_id,
+					result.reference_id || "N/A",
 				]),
 			});
 		}
@@ -108,7 +151,7 @@ zoyktech_zambia_payments.PaymentIntegration = class {
 					reference_id: reference_id,
 				},
 				callback: (response) => {
-					if (response.message.success) {
+					if (response.message && response.message.success) {
 						const status = response.message.status;
 
 						if (status === "Completed") {
@@ -138,7 +181,6 @@ zoyktech_zambia_payments.PaymentIntegration = class {
 
 	check_payment_status(event) {
 		event.preventDefault();
-
 		const $btn = $(event.currentTarget);
 		const reference_id = $btn.data("reference-id");
 
@@ -157,7 +199,7 @@ zoyktech_zambia_payments.PaymentIntegration = class {
 			callback: (response) => {
 				$btn.prop("disabled", false).html(__("Check Status"));
 
-				if (response.message.success) {
+				if (response.message && response.message.success) {
 					const status = response.message.status;
 					let indicator = "blue";
 					let message = __("Payment status: {0}", [status]);
@@ -168,6 +210,9 @@ zoyktech_zambia_payments.PaymentIntegration = class {
 					} else if (status === "Failed") {
 						indicator = "red";
 						message = __("Payment failed");
+					} else if (status === "Pending") {
+						indicator = "orange";
+						message = __("Payment is pending");
 					}
 
 					frappe.msgprint({
@@ -179,7 +224,9 @@ zoyktech_zambia_payments.PaymentIntegration = class {
 					frappe.msgprint({
 						title: __("Status Check Failed"),
 						indicator: "red",
-						message: response.message.message || __("Failed to check payment status"),
+						message:
+							(response.message && response.message.message) ||
+							__("Failed to check payment status"),
 					});
 				}
 			},
@@ -188,7 +235,6 @@ zoyktech_zambia_payments.PaymentIntegration = class {
 
 	cancel_payment(event) {
 		event.preventDefault();
-
 		const $btn = $(event.currentTarget);
 		const reference_id = $btn.data("reference-id");
 
@@ -208,7 +254,7 @@ zoyktech_zambia_payments.PaymentIntegration = class {
 				callback: (response) => {
 					$btn.prop("disabled", false).html(__("Cancel Payment"));
 
-					if (response.message.success) {
+					if (response.message && response.message.success) {
 						frappe.msgprint({
 							title: __("Payment Cancelled"),
 							indicator: "orange",
@@ -223,7 +269,9 @@ zoyktech_zambia_payments.PaymentIntegration = class {
 						frappe.msgprint({
 							title: __("Cancellation Failed"),
 							indicator: "red",
-							message: response.message.message || __("Failed to cancel payment"),
+							message:
+								(response.message && response.message.message) ||
+								__("Failed to cancel payment"),
 						});
 					}
 				},
@@ -261,13 +309,15 @@ zoyktech_zambia_payments.PaymentIntegration = class {
 
 	update_payment_status_indicators(reference_id, status) {
 		// Find and update all elements with this reference
-		$(`[data-reference-id="${reference_id}"]`).each(function () {
-			const $element = $(this);
+		$(`[data-reference-id="${reference_id}"]`).each((index, element) => {
+			const $element = $(element);
 			const $statusBadge = $element.find(".payment-status");
 
 			if ($statusBadge.length) {
 				$statusBadge
-					.removeClass("badge-success badge-danger badge-warning badge-info")
+					.removeClass(
+						"badge-success badge-danger badge-warning badge-info badge-secondary"
+					)
 					.addClass(this.get_status_badge_class(status))
 					.text(status);
 			}
@@ -282,7 +332,6 @@ zoyktech_zambia_payments.PaymentIntegration = class {
 			Cancelled: "badge-secondary",
 			Refunded: "badge-info",
 		};
-
 		return statusClasses[status] || "badge-secondary";
 	}
 
@@ -290,41 +339,40 @@ zoyktech_zambia_payments.PaymentIntegration = class {
 	create_payment_button(doctype, docname, amount, currency, payment_methods = []) {
 		const buttonHtml = `
             <div class="payment-button-container">
+                ${this.create_payment_methods_dropdown(payment_methods, doctype, docname)}
                 <button class="btn btn-primary btn-create-payment" 
                         data-doctype="${doctype}" 
                         data-docname="${docname}">
                     ${__("Pay")} ${amount} ${currency}
                 </button>
-                ${this.create_payment_methods_dropdown(payment_methods, doctype, docname)}
             </div>
         `;
-
 		return buttonHtml;
 	}
 
 	create_payment_methods_dropdown(payment_methods, doctype, docname) {
-		if (payment_methods.length === 0) {
+		if (!payment_methods || payment_methods.length === 0) {
 			return "";
 		}
 
 		const dropdownItems = payment_methods
 			.map(
 				(method) => `
-            <a class="dropdown-item" href="#" 
-               data-payment-method="${method.value}"
-               data-doctype="${doctype}"
-               data-docname="${docname}">
-                ${method.label}
-            </a>
-        `
+                    <a class="dropdown-item" href="#" 
+                       data-payment-method="${method.value}"
+                       data-doctype="${doctype}"
+                       data-docname="${docname}">
+                        ${method.label}
+                    </a>
+                `
 			)
 			.join("");
 
 		return `
-            <div class="dropdown payment-methods-dropdown">
+            <div class="dropdown payment-methods-dropdown" style="display: inline-block;">
                 <button class="btn btn-secondary dropdown-toggle" type="button" 
                         data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    ${__("Payment Methods")}
+                    ${__("Select Method")}
                 </button>
                 <div class="dropdown-menu">
                     ${dropdownItems}
@@ -332,22 +380,66 @@ zoyktech_zambia_payments.PaymentIntegration = class {
             </div>
         `;
 	}
+
+	// Add payment status badge to element
+	add_payment_status_badge(reference_id, status, parent_selector) {
+		const badgeClass = this.get_status_badge_class(status);
+		const badgeHtml = `
+            <span class="badge ${badgeClass} payment-status" data-reference-id="${reference_id}">
+                ${status}
+            </span>
+        `;
+		$(parent_selector).append(badgeHtml);
+	}
+
+	// Add payment action buttons
+	add_payment_actions(reference_id, parent_selector, show_cancel = true) {
+		const actionsHtml = `
+            <div class="payment-actions" data-reference-id="${reference_id}">
+                <button class="btn btn-sm btn-secondary btn-check-payment-status" 
+                        data-reference-id="${reference_id}">
+                    ${__("Check Status")}
+                </button>
+                ${
+					show_cancel
+						? `
+                    <button class="btn btn-sm btn-danger btn-cancel-payment" 
+                            data-reference-id="${reference_id}">
+                        ${__("Cancel")}
+                    </button>
+                `
+						: ""
+				}
+            </div>
+        `;
+		$(parent_selector).append(actionsHtml);
+	}
 };
 
-// Initialize payment integration
-frappe.ready(function () {
+// Initialize payment integration when DOM is ready
+$(document).ready(function () {
 	window.zoyktechZambiaPayments = new zoyktech_zambia_payments.PaymentIntegration();
 });
 
 // Utility functions
 zoyktech_zambia_payments.format_currency = function (amount, currency = "ZMW") {
-	return new Intl.NumberFormat("en-ZM", {
-		style: "currency",
-		currency: currency,
-	}).format(amount);
+	try {
+		return new Intl.NumberFormat("en-ZM", {
+			style: "currency",
+			currency: currency,
+		}).format(amount);
+	} catch (e) {
+		return `${currency} ${parseFloat(amount).toFixed(2)}`;
+	}
 };
 
 zoyktech_zambia_payments.validate_phone = function (phone) {
+	if (!phone) return false;
 	const zmPhoneRegex = /^(\+260|260|0)(76|77|96|97)\d{7}$/;
 	return zmPhoneRegex.test(phone.replace(/\s/g, ""));
 };
+
+// Make it available globally immediately
+if (typeof window !== "undefined") {
+	window.zoyktech_zambia_payments = zoyktech_zambia_payments;
+}

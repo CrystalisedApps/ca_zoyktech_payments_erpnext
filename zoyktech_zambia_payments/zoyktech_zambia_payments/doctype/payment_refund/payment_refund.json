@@ -1,28 +1,52 @@
 {
+  "creation": "2025-12-03 12:00:00",
+  "modified": "2025-12-03 12:00:00",
+  "modified_by": "Administrator",
+  "owner": "Administrator",
+  "docstatus": 0,
+  "idx": 0,
   "doctype": "DocType",
-  "module": "Zoyktech Zambia Payments",
   "name": "Payment Refund",
-  "is_single": 0,
+  "module": "Zoyktech Zambia Payments",
+  "custom": 1,
+  "is_custom": 1,
   "autoname": "format:REF-{YYYY}-{MM}-{#####}",
+  "search_fields": "payment_reference,transaction_id,customer_email",
+  "title_field": "name",
+  "allow_rename": 0,
+  "allow_copy": 1,
+  "show_title_field_in_link": 1,
+  "color": "#e17055",
+  "icon": "fa fa-undo",
   "fields": [
     {
       "fieldname": "payment_reference",
       "fieldtype": "Link",
       "label": "Payment Reference",
       "options": "Payment Transaction",
-      "reqd": 1
+      "reqd": 1,
+      "search_index": 1,
+      "in_list_view": 1,
+      "in_standard_filter": 1,
+      "allow_in_quick_entry": 1
     },
     {
       "fieldname": "refund_amount",
       "fieldtype": "Currency",
       "label": "Refund Amount",
-      "reqd": 1
+      "reqd": 1,
+      "in_list_view": 1,
+      "in_standard_filter": 1,
+      "allow_in_quick_entry": 1,
+      "precision": "2"
     },
     {
       "fieldname": "original_amount",
       "fieldtype": "Currency",
       "label": "Original Amount",
-      "reqd": 1
+      "reqd": 1,
+      "read_only": 1,
+      "precision": "2"
     },
     {
       "fieldname": "currency",
@@ -30,19 +54,26 @@
       "label": "Currency",
       "options": "ZMW\nUSD",
       "default": "ZMW",
-      "reqd": 1
+      "reqd": 1,
+      "in_list_view": 1,
+      "allow_in_quick_entry": 1
     },
     {
       "fieldname": "reason",
       "fieldtype": "Select",
       "label": "Refund Reason",
       "options": "Customer Request\nDuplicate Payment\nService Not Provided\nTechnical Error\nFraudulent Transaction\nOther",
-      "reqd": 1
+      "reqd": 1,
+      "in_list_view": 1,
+      "in_standard_filter": 1,
+      "allow_in_quick_entry": 1
     },
     {
       "fieldname": "reason_description",
       "fieldtype": "Text",
-      "label": "Reason Description"
+      "label": "Reason Description",
+      "mandatory_depends_on": "eval:doc.reason == 'Other'",
+      "allow_in_quick_entry": 1
     },
     {
       "fieldname": "status",
@@ -50,17 +81,24 @@
       "label": "Status",
       "options": "Pending\nProcessing\nCompleted\nFailed\nCancelled",
       "default": "Pending",
-      "reqd": 1
+      "reqd": 1,
+      "in_list_view": 1,
+      "in_standard_filter": 1,
+      "bold": 1,
+      "allow_in_quick_entry": 1
     },
     {
       "fieldname": "transaction_id",
       "fieldtype": "Data",
-      "label": "Refund Transaction ID"
+      "label": "Refund Transaction ID",
+      "in_list_view": 1,
+      "in_global_search": 1
     },
     {
       "fieldname": "gateway_response",
       "fieldtype": "Code",
-      "label": "Gateway Response"
+      "label": "Gateway Response",
+      "options": "JSON"
     },
     {
       "fieldname": "section_break_1",
@@ -70,42 +108,103 @@
     {
       "fieldname": "customer_email",
       "fieldtype": "Data",
-      "label": "Customer Email"
+      "label": "Customer Email",
+      "options": "Email",
+      "in_list_view": 1,
+      "in_standard_filter": 1
     },
     {
       "fieldname": "customer_phone",
       "fieldtype": "Data",
-      "label": "Customer Phone"
+      "label": "Customer Phone",
+      "in_standard_filter": 1
     },
     {
       "fieldname": "refund_initiated_by",
       "fieldtype": "Link",
       "label": "Initiated By",
-      "options": "User"
+      "options": "User",
+      "read_only": 1,
+      "default": "user"
     },
     {
       "fieldname": "refund_initiated_date",
       "fieldtype": "Datetime",
-      "label": "Initiated Date"
+      "label": "Initiated Date",
+      "read_only": 1,
+      "default": "Now"
     },
     {
       "fieldname": "refund_completed_date",
       "fieldtype": "Datetime",
-      "label": "Completed Date"
+      "label": "Completed Date",
+      "read_only": 1
     }
   ],
   "permissions": [
     {
+      "role": "System Manager",
+      "read": 1,
+      "write": 1,
       "create": 1,
       "delete": 1,
-      "email": 1,
-      "export": 1,
-      "print": 1,
-      "read": 1,
+      "submit": 0,
+      "cancel": 0,
+      "amend": 0,
       "report": 1,
-      "role": "Accounts Manager",
+      "export": 1,
+      "import": 1,
       "share": 1,
-      "write": 1
+      "print": 1,
+      "email": 1
+    },
+    {
+      "role": "Administrator",
+      "read": 1,
+      "write": 1,
+      "create": 1,
+      "delete": 1,
+      "submit": 0,
+      "cancel": 0,
+      "amend": 0,
+      "report": 1,
+      "export": 1,
+      "import": 1,
+      "share": 1,
+      "print": 1,
+      "email": 1
+    },
+    {
+      "role": "Accounts Manager",
+      "read": 1,
+      "write": 1,
+      "create": 1,
+      "delete": 1,
+      "submit": 0,
+      "cancel": 0,
+      "amend": 0,
+      "report": 1,
+      "export": 1,
+      "import": 1,
+      "share": 1,
+      "print": 1,
+      "email": 1
+    },
+    {
+      "role": "Sales Manager",
+      "read": 1,
+      "write": 0,
+      "create": 0,
+      "delete": 0,
+      "submit": 0,
+      "cancel": 0,
+      "amend": 0,
+      "report": 1,
+      "export": 1,
+      "import": 0,
+      "share": 0,
+      "print": 1,
+      "email": 0
     }
   ]
 }

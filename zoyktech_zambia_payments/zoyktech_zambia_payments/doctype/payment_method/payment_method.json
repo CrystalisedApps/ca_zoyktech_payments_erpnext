@@ -1,10 +1,25 @@
 {
+  "creation": "2025-12-03 12:00:00",
+  "modified": "2025-12-03 12:00:00",
+  "modified_by": "Administrator",
+  "owner": "Administrator",
+  "docstatus": 0,
+  "idx": 0,
   "doctype": "DocType",
-  "module": "Zoyktech Zambia Payments",
   "name": "Payment Method",
-  "is_single": 0,
+  "module": "Zoyktech Zambia Payments",
+  "custom": 1,
+  "is_custom": 1,
   "istable": 1,
-  "autoname": "field:payment_method",
+  "autoname": "hash",
+  "naming_rule": "Random",
+  "search_fields": "payment_method,payment_gateway",
+  "title_field": "payment_method",
+  "allow_rename": 0,
+  "allow_copy": 0,
+  "show_title_field_in_link": 1,
+  "color": "#a29bfe",
+  "icon": "fa fa-credit-card",
   "fields": [
     {
       "fieldname": "payment_method",
@@ -12,55 +27,75 @@
       "label": "Payment Method",
       "options": "MTN Mobile Money\nAirtel Money\nVisa Card\nMasterCard\nBank Transfer\nZanaco\nStanbic\nFNB",
       "reqd": 1,
-      "unique": 1
+      "in_list_view": 1,
+      "in_standard_filter": 1,
+      "width": "150px"
     },
     {
       "fieldname": "enabled",
       "fieldtype": "Check",
       "label": "Enabled",
-      "default": 1
+      "default": 1,
+      "in_list_view": 1,
+      "in_standard_filter": 1,
+      "width": "80px"
     },
     {
       "fieldname": "payment_gateway",
       "fieldtype": "Select",
       "label": "Payment Gateway",
       "options": "ZoykTech\nManual\nBank API",
-      "default": "ZoykTech"
+      "default": "ZoykTech",
+      "in_list_view": 1,
+      "in_standard_filter": 1,
+      "width": "120px"
     },
     {
       "fieldname": "processing_fee_percentage",
       "fieldtype": "Float",
       "label": "Processing Fee (%)",
-      "default": 2.5
+      "default": 2.5,
+      "in_list_view": 1,
+      "precision": "2",
+      "width": "120px"
     },
     {
       "fieldname": "fixed_fee",
       "fieldtype": "Currency",
       "label": "Fixed Fee",
-      "default": 2.0
+      "default": 2.0,
+      "precision": "2",
+      "width": "100px"
     },
     {
       "fieldname": "minimum_amount",
       "fieldtype": "Currency",
       "label": "Minimum Amount",
-      "default": 1.0
+      "default": 1.0,
+      "precision": "2",
+      "width": "120px"
     },
     {
       "fieldname": "maximum_amount",
       "fieldtype": "Currency",
       "label": "Maximum Amount",
-      "default": 50000.0
+      "default": 50000.0,
+      "precision": "2",
+      "width": "120px"
     },
     {
       "fieldname": "icon",
       "fieldtype": "Data",
       "label": "Icon Class",
-      "description": "Font Awesome icon class (e.g., fa-mobile, fa-credit-card)"
+      "description": "Font Awesome icon class (e.g., fa-mobile, fa-credit-card)",
+      "default": "fa-credit-card",
+      "width": "120px"
     },
     {
       "fieldname": "description",
       "fieldtype": "Text",
-      "label": "Description"
+      "label": "Description",
+      "width": "200px"
     },
     {
       "fieldname": "section_break_1",
@@ -71,27 +106,66 @@
       "fieldname": "gateway_method_code",
       "fieldtype": "Data",
       "label": "Gateway Method Code",
-      "description": "Code used by payment gateway for this method"
+      "description": "Code used by payment gateway for this method",
+      "width": "150px"
     },
     {
       "fieldname": "test_mode_enabled",
       "fieldtype": "Check",
       "label": "Enable in Test Mode",
-      "default": 1
+      "default": 1,
+      "width": "120px"
     }
   ],
   "permissions": [
     {
+      "role": "System Manager",
+      "read": 1,
+      "write": 1,
       "create": 1,
       "delete": 1,
-      "email": 1,
-      "export": 1,
-      "print": 1,
-      "read": 1,
+      "submit": 0,
+      "cancel": 0,
+      "amend": 0,
       "report": 1,
-      "role": "System Manager",
+      "export": 1,
+      "import": 1,
       "share": 1,
-      "write": 1
+      "print": 1,
+      "email": 1
+    },
+    {
+      "role": "Administrator",
+      "read": 1,
+      "write": 1,
+      "create": 1,
+      "delete": 1,
+      "submit": 0,
+      "cancel": 0,
+      "amend": 0,
+      "report": 1,
+      "export": 1,
+      "import": 1,
+      "share": 1,
+      "print": 1,
+      "email": 1
+    },
+    {
+      "role": "Accounts Manager",
+      "read": 1,
+      "write": 1,
+      "create": 1,
+      "delete": 0,
+      "submit": 0,
+      "cancel": 0,
+      "amend": 0,
+      "report": 1,
+      "export": 1,
+      "import": 0,
+      "share": 0,
+      "print": 1,
+      "email": 1
     }
-  ]
+  ],
+  "sync_on_migrate": 1
 }

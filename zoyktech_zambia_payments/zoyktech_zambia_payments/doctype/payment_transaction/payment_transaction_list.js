@@ -1,6 +1,5 @@
 // payment_transaction_list.js
 
-
 // =============================================
 // PRE-EMPTIVE LIST VIEW OVERRIDE
 // =============================================
@@ -62,7 +61,7 @@ frappe.views.ListView = class CustomListView extends OriginalListView {
             .list-view-container[data-doctype="Payment Transaction"] .list-header .btn-primary {
                 display: none !important;
             }
-            
+
             /* Custom empty state styling */
             .custom-payment-transaction-empty-state {
                 text-align: center;
@@ -79,32 +78,32 @@ frappe.views.ListView = class CustomListView extends OriginalListView {
                 box-shadow: 0 2px 10px rgba(0,0,0,0.05);
                 animation: fadeIn 0.5s ease;
             }
-            
+
             @keyframes fadeIn {
                 from { opacity: 0; transform: translateY(20px); }
                 to { opacity: 1; transform: translateY(0); }
             }
-            
+
             .custom-payment-transaction-empty-state .empty-state-icon {
                 font-size: 80px;
                 margin-bottom: 20px;
                 color: #d1d8dd;
                 animation: pulse 2s infinite;
             }
-            
+
             @keyframes pulse {
                 0% { transform: scale(1); opacity: 0.8; }
                 50% { transform: scale(1.05); opacity: 1; }
                 100% { transform: scale(1); opacity: 0.8; }
             }
-            
+
             .custom-payment-transaction-empty-state h3 {
                 margin-bottom: 15px;
                 color: #36414c;
                 font-weight: 400;
                 font-size: 24px;
             }
-            
+
             .custom-payment-transaction-empty-state .empty-state-buttons {
                 margin-top: 20px;
                 display: flex;
@@ -112,29 +111,29 @@ frappe.views.ListView = class CustomListView extends OriginalListView {
                 flex-wrap: wrap;
                 justify-content: center;
             }
-            
+
             .custom-payment-transaction-empty-state .btn-empty-state {
                 padding: 12px 30px;
                 font-size: 16px;
                 border-radius: 6px;
                 transition: all 0.2s ease;
             }
-            
+
             .custom-payment-transaction-empty-state .btn-empty-state:hover {
                 transform: translateY(-2px);
             }
-            
+
             .btn-empty-state-primary {
                 background: #5e64ff;
                 border-color: #5e64ff;
             }
-            
+
             .btn-empty-state-primary:hover {
                 background: #4a50e0;
                 border-color: #4a50e0;
                 box-shadow: 0 4px 12px rgba(94, 100, 255, 0.3);
             }
-            
+
             /* Quick filter buttons styling */
             .payment-transaction-quick-filters {
                 margin: 10px 0;
@@ -143,25 +142,25 @@ frappe.views.ListView = class CustomListView extends OriginalListView {
                 border-radius: 4px;
                 border: 1px solid #d1d8dd;
             }
-            
+
             /* List row styling */
             .list-view-container[data-doctype="Payment Transaction"] .list-row {
                 border-left: 4px solid #d1d8dd;
                 transition: all 0.2s ease;
             }
-            
+
             .list-view-container[data-doctype="Payment Transaction"] .list-row[data-status="Completed"] {
                 border-left-color: #28a745;
             }
-            
+
             .list-view-container[data-doctype="Payment Transaction"] .list-row[data-status="Pending"] {
                 border-left-color: #ffc107;
             }
-            
+
             .list-view-container[data-doctype="Payment Transaction"] .list-row[data-status="Failed"] {
                 border-left-color: #dc3545;
             }
-            
+
             /* Status indicators in list */
             .list-view-container[data-doctype="Payment Transaction"] .list-row-col .indicator-pill {
                 font-size: 11px;
@@ -169,7 +168,7 @@ frappe.views.ListView = class CustomListView extends OriginalListView {
                 border-radius: 10px;
                 font-weight: 600;
             }
-            
+
             .indicator-pill.green { background: #d4edda; color: #155724; }
             .indicator-pill.orange { background: #fff3cd; color: #856404; }
             .indicator-pill.red { background: #f8d7da; color: #721c24; }
@@ -237,9 +236,9 @@ frappe.views.ListView = class CustomListView extends OriginalListView {
                 <div class="empty-state-icon">
                     <i class="fa fa-exchange"></i>
                 </div>
-                
+
                 <h3>${__("No Payment Transactions Yet")}</h3>
-                
+
                 <p style="
                     margin-bottom: 30px;
                     max-width: 500px;
@@ -253,17 +252,17 @@ frappe.views.ListView = class CustomListView extends OriginalListView {
 						"You haven't processed any payment transactions yet. Transactions will appear here when payments are made through your payment links."
 					)}
                 </p>
-                
+
                 <div class="empty-state-buttons">
                     <button class="btn btn-empty-state btn-empty-state-primary btn-create-transaction">
                         <i class="fa fa-plus"></i> ${__("Create Transaction")}
                     </button>
-                    
+
                     <button class="btn btn-default btn-empty-state btn-create-payment-link">
                         <i class="fa fa-link"></i> ${__("Create Payment Link")}
                     </button>
                 </div>
-                
+
                 <div style="
                     margin-top: 40px;
                     padding: 20px;

@@ -36,7 +36,7 @@ function add_custom_css(frm) {
             border-radius: 4px;
             background-color: #fff;
         }
-        
+
         .custom-gateway-response h5 {
             margin: 0;
             padding: 10px 15px;
@@ -46,7 +46,7 @@ function add_custom_css(frm) {
             font-size: 13px;
             color: #36414c;
         }
-        
+
         .custom-gateway-response pre {
             margin: 0;
             padding: 15px;
@@ -61,33 +61,33 @@ function add_custom_css(frm) {
             word-wrap: break-word;
             font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
         }
-        
+
         .custom-status-indicator {
             margin-top: 15px;
         }
-        
+
         .custom-status-indicator .alert {
             margin-bottom: 0;
             border-radius: 4px;
         }
-        
+
         .custom-status-indicator h6 {
             margin-top: 0;
             margin-bottom: 8px;
             font-weight: 600;
             font-size: 13px;
         }
-        
+
         .custom-status-indicator p {
             margin-bottom: 5px;
             font-size: 12px;
             line-height: 1.5;
         }
-        
+
         .custom-status-indicator p:last-child {
             margin-bottom: 0;
         }
-        
+
         .custom-status-indicator strong {
             color: #36414c;
         }

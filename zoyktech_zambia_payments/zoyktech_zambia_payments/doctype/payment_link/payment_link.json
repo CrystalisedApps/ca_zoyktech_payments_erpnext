@@ -1,41 +1,68 @@
 {
+  "creation": "2025-12-03 12:00:00",
+  "modified": "2025-12-03 12:00:00",
+  "modified_by": "Administrator",
+  "owner": "Administrator",
+  "docstatus": 0,
+  "idx": 0,
   "doctype": "DocType",
-  "module": "Zoyktech Zambia Payments",
   "name": "Payment Link",
+  "module": "Zoyktech Zambia Payments",
+  "custom": 1,
+  "is_custom": 1,
   "autoname": "field:reference_id",
+  "search_fields": "reference_id,customer_name,customer_email,payment_url",
+  "title_field": "reference_id",
+  "allow_rename": 1,
+  "allow_copy": 1,
+  "show_title_field_in_link": 1,
+  "color": "#00b894",
+  "icon": "fa fa-link",
   "fields": [
     {
       "fieldname": "reference_id",
       "fieldtype": "Data",
       "label": "Reference ID",
       "unique": 1,
-      "reqd": 1
+      "reqd": 1,
+      "search_index": 1,
+      "in_list_view": 1,
+      "in_standard_filter": 1,
+      "allow_in_quick_entry": 1
     },
     {
       "fieldname": "linked_doctype",
       "fieldtype": "Link",
       "label": "Linked DocType",
       "options": "DocType",
-      "reqd": 1
+      "reqd": 1,
+      "in_list_view": 1,
+      "in_standard_filter": 1
     },
     {
       "fieldname": "linked_docname",
       "fieldtype": "Dynamic Link",
       "label": "Linked Document",
       "options": "linked_doctype",
-      "reqd": 1
+      "reqd": 1,
+      "in_list_view": 1,
+      "in_standard_filter": 1
     },
     {
       "fieldname": "payment_transaction",
       "fieldtype": "Link",
       "label": "Payment Transaction",
-      "options": "Payment Transaction"
+      "options": "Payment Transaction",
+      "in_list_view": 1
     },
     {
       "fieldname": "amount",
       "fieldtype": "Currency",
       "label": "Amount",
-      "reqd": 1
+      "reqd": 1,
+      "in_list_view": 1,
+      "in_standard_filter": 1,
+      "allow_in_quick_entry": 1
     },
     {
       "fieldname": "currency",
@@ -43,7 +70,9 @@
       "label": "Currency",
       "options": "ZMW\nUSD",
       "default": "ZMW",
-      "reqd": 1
+      "reqd": 1,
+      "in_list_view": 1,
+      "allow_in_quick_entry": 1
     },
     {
       "fieldname": "status",
@@ -51,22 +80,32 @@
       "label": "Status",
       "options": "Pending\nPaid\nFailed\nCancelled\nExpired",
       "default": "Pending",
-      "reqd": 1
+      "reqd": 1,
+      "in_list_view": 1,
+      "in_standard_filter": 1,
+      "bold": 1,
+      "allow_in_quick_entry": 1
     },
     {
       "fieldname": "payment_url",
       "fieldtype": "Data",
-      "label": "Payment URL"
+      "label": "Payment URL",
+      "in_list_view": 1,
+      "in_global_search": 1,
+      "length": 500
     },
     {
       "fieldname": "expiry_date",
       "fieldtype": "Datetime",
-      "label": "Expiry Date"
+      "label": "Expiry Date",
+      "in_list_view": 1,
+      "in_standard_filter": 1
     },
     {
       "fieldname": "description",
       "fieldtype": "Text",
-      "label": "Description"
+      "label": "Description",
+      "in_list_view": 1
     },
     {
       "fieldname": "section_break_1",
@@ -77,22 +116,30 @@
       "fieldname": "customer",
       "fieldtype": "Link",
       "label": "Customer",
-      "options": "Customer"
+      "options": "Customer",
+      "in_list_view": 1,
+      "in_standard_filter": 1
     },
     {
       "fieldname": "customer_name",
       "fieldtype": "Data",
-      "label": "Customer Name"
+      "label": "Customer Name",
+      "in_list_view": 1
     },
     {
       "fieldname": "customer_email",
       "fieldtype": "Data",
-      "label": "Customer Email"
+      "label": "Customer Email",
+      "options": "Email",
+      "in_list_view": 1,
+      "in_standard_filter": 1
     },
     {
       "fieldname": "customer_phone",
       "fieldtype": "Data",
-      "label": "Customer Phone"
+      "label": "Customer Phone",
+      "in_list_view": 1,
+      "in_standard_filter": 1
     },
     {
       "fieldname": "section_break_2",
@@ -103,7 +150,8 @@
       "fieldname": "creation",
       "fieldtype": "Datetime",
       "label": "Created On",
-      "read_only": 1
+      "read_only": 1,
+      "default": "Now"
     },
     {
       "fieldname": "modified",
@@ -114,28 +162,68 @@
   ],
   "permissions": [
     {
+      "role": "System Manager",
+      "read": 1,
+      "write": 1,
       "create": 1,
       "delete": 1,
-      "email": 1,
-      "export": 1,
-      "print": 1,
-      "read": 1,
+      "submit": 0,
+      "cancel": 0,
+      "amend": 0,
       "report": 1,
-      "role": "System Manager",
+      "export": 1,
+      "import": 1,
       "share": 1,
-      "write": 1
+      "print": 1,
+      "email": 1
     },
     {
+      "role": "Administrator",
+      "read": 1,
+      "write": 1,
+      "create": 1,
+      "delete": 1,
+      "submit": 0,
+      "cancel": 0,
+      "amend": 0,
+      "report": 1,
+      "export": 1,
+      "import": 1,
+      "share": 1,
+      "print": 1,
+      "email": 1
+    },
+    {
+      "role": "Accounts Manager",
+      "read": 1,
+      "write": 1,
       "create": 1,
       "delete": 0,
-      "email": 1,
-      "export": 1,
-      "print": 1,
-      "read": 1,
+      "submit": 0,
+      "cancel": 0,
+      "amend": 0,
       "report": 1,
-      "role": "Accounts Manager",
+      "export": 1,
+      "import": 1,
       "share": 1,
-      "write": 1
+      "print": 1,
+      "email": 1
+    },
+    {
+      "role": "Sales Manager",
+      "read": 1,
+      "write": 1,
+      "create": 1,
+      "delete": 0,
+      "submit": 0,
+      "cancel": 0,
+      "amend": 0,
+      "report": 1,
+      "export": 1,
+      "import": 0,
+      "share": 0,
+      "print": 1,
+      "email": 0
     }
   ]
 }

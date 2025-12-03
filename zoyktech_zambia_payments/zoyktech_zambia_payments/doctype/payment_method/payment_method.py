@@ -1,3 +1,4 @@
+# payment_method.py
 import frappe
 from frappe.model.document import Document
 from frappe import _

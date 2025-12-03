@@ -14,7 +14,7 @@ app_license = "mit"
 # Apps
 # ------------------
 
-# required_apps = []
+required_apps = ["erpnext"]
 
 # Each item in the list will be shown as an app in the apps page
 # add_to_apps_screen = [
@@ -27,20 +27,20 @@ app_license = "mit"
 # 	}
 # ]
 
-doctype = ["Payment Dashboard", "Payment Transaction"] 
+doctype = ["Payment Dashboard", "Payment Transaction"]
 
 # Includes in <head>
 # ------------------
 
 # include js, css files in header of desk.html
 app_include_css = [
-    "/assets/zoyktech_zambia_payments/css/payment_buttons.css",
-    "/assets/zoyktech_zambia_payments/css/payment_forms.css",
-    # "/assets/zoyktech_zambia_payments/css/payment_dashboard.css"
+	"/assets/zoyktech_zambia_payments/css/payment_buttons.css",
+	"/assets/zoyktech_zambia_payments/css/payment_forms.css",
+	# "/assets/zoyktech_zambia_payments/css/payment_dashboard.css"
 ]
 app_include_js = [
-    "/assets/zoyktech_zambia_payments/js/payment_integration.js",
-    "/assets/zoyktech_zambia_payments/js/payment_buttons.js"
+	"/assets/zoyktech_zambia_payments/js/payment_integration.js",
+	"/assets/zoyktech_zambia_payments/js/payment_buttons.js",
 ]
 
 # include js, css files in header of web template
@@ -55,17 +55,15 @@ web_include_js = ["/assets/zoyktech_zambia_payments/js/webhook_handler.js"]
 # webform_include_css = {"doctype": "public/css/doctype.css"}
 
 # include js in page
-page_js = {
-    "point-of-sale": "public/js/pos_payment_integration.js"
-}
+page_js = {"point-of-sale": "public/js/pos_payment_integration.js"}
 
 # include js in doctype views
 doctype_js = {
-    "Sales Invoice": "public/js/sales_invoice_payments.js",
-    "Purchase Invoice": "public/js/purchase_invoice_payments.js",
-    "Sales Order": "public/js/sales_order_payments.js",
-    "Payment Entry": "public/js/payment_entry_enhancements.js",
-    "Payment Dashboard": "public/js/payment_dashboard.js"
+	"Sales Invoice": "public/js/sales_invoice_payments.js",
+	"Purchase Invoice": "public/js/purchase_invoice_payments.js",
+	"Sales Order": "public/js/sales_order_payments.js",
+	"Payment Entry": "public/js/payment_entry_enhancements.js",
+	"Payment Dashboard": "public/js/payment_dashboard.js",
 }
 
 # Svg Icons
@@ -103,7 +101,7 @@ doctype_js = {
 # ------------
 
 # before_install = "zoyktech_zambia_payments.install.before_install"
-# after_install = "zoyktech_zambia_payments.install.after_install"
+after_install = "zoyktech_zambia_payments.install.after_install"
 
 # Uninstallation
 # ------------
@@ -115,6 +113,7 @@ doctype_js = {
 # ------------------
 # To set up dependencies/integrations with other apps
 # Name of the app being installed is passed as an argument
+dependencies = ["erpnext"]
 
 # before_app_install = "zoyktech_zambia_payments.utils.before_app_install"
 # after_app_install = "zoyktech_zambia_payments.utils.after_app_install"
@@ -150,7 +149,7 @@ doctype_js = {
 # Override standard doctype classes
 
 override_doctype_class = {
-    "Payment Entry": "zoyktech_zambia_payments.zoyktech_zambia_payments.overrides.payment_entry.CustomPaymentEntry"
+	"Payment Entry": "zoyktech_zambia_payments.zoyktech_zambia_payments.overrides.payment_entry.CustomPaymentEntry"
 }
 
 # Document Events
@@ -158,40 +157,43 @@ override_doctype_class = {
 # Hook on document methods and events
 
 doc_events = {
-    "Sales Invoice": {
-        "on_submit": "zoyktech_zambia_payments.zoyktech_zambia_payments.utils.invoice_handlers.create_payment_link_on_submit",
-        "on_payment_authorized": "zoyktech_zambia_payments.zoyktech_zambia_payments.utils.invoice_handlers.handle_payment_authorization"
-    },
-    "Payment Entry": {
-        "on_submit": "zoyktech_zambia_payments.zoyktech_zambia_payments.utils.payment_handlers.update_payment_gateway_status",
-        "on_cancel": "zoyktech_zambia_payments.zoyktech_zambia_payments.utils.payment_handlers.handle_payment_cancellation"
-    },
-    "Payment Dashboard": { 
-        "on_update": "zoyktech_zambia_payments.zoyktech_zambia_payments.doctype.payment_dashboard.payment_dashboard.PaymentDashboard.update_dashboard_stats"
-    },
-    "Subscription": {
-        "on_submit": "zoyktech_zambia_payments.zoyktech_zambia_payments.utils.subscription_events.on_subscription_submit",
-        "on_update": "zoyktech_zambia_payments.zoyktech_zambia_payments.utils.subscription_events.on_subscription_update"
-    }
+	"Sales Invoice": {
+		"on_submit": "zoyktech_zambia_payments.zoyktech_zambia_payments.utils.invoice_handlers.create_payment_link_on_submit",
+		"on_payment_authorized": "zoyktech_zambia_payments.zoyktech_zambia_payments.utils.invoice_handlers.handle_payment_authorization",
+	},
+	"Payment Entry": {
+		"on_submit": "zoyktech_zambia_payments.zoyktech_zambia_payments.utils.payment_handlers.update_payment_gateway_status",
+		"on_cancel": "zoyktech_zambia_payments.zoyktech_zambia_payments.utils.payment_handlers.handle_payment_cancellation",
+	},
+	"Payment Dashboard": {
+		"on_update": "zoyktech_zambia_payments.zoyktech_zambia_payments.doctype.payment_dashboard.payment_dashboard.PaymentDashboard.update_dashboard_stats"
+	},
+	"Subscription": {
+		"on_submit": "zoyktech_zambia_payments.zoyktech_zambia_payments.utils.subscription_events.on_subscription_submit",
+		"on_update": "zoyktech_zambia_payments.zoyktech_zambia_payments.utils.subscription_events.on_subscription_update",
+	},
 }
 
 # Scheduled Tasks
 # ---------------
 
 scheduler_events = {
-    "daily": [
-        "zoyktech_zambia_payments.zoyktech_zambia_payments.utils.scheduled_tasks.reconcile_pending_payments",
-        "zoyktech_zambia_payments.zoyktech_zambia_payments.utils.scheduled_tasks.send_payment_reports",
-        "zoyktech_zambia_payments.zoyktech_zambia_payments.utils.subscription_scheduler.process_due_subscriptions",
+    "all": [
+        "zoyktech_zambia_payments.zoyktech_zambia_payments.utils.health_check.check_payment_gateway_health"
     ],
-    "hourly": [
-        "zoyktech_zambia_payments.zoyktech_zambia_payments.utils.scheduled_tasks.check_pending_payments",
-        "zoyktech_zambia_payments.zoyktech_zambia_payments.doctype.payment_dashboard.payment_dashboard.refresh_dashboard_cache",
-         "zoyktech_zambia_payments.zoyktech_zambia_payments.utils.subscription_scheduler.check_pending_subscription_payments"
-    ],
-    "monthly": [
-        "zoyktech_zambia_payments.zoyktech_zambia_payments.utils.scheduled_tasks.cleanup_old_payments"
-    ]
+	"daily": [
+		"zoyktech_zambia_payments.zoyktech_zambia_payments.utils.scheduled_tasks.reconcile_pending_payments",
+		"zoyktech_zambia_payments.zoyktech_zambia_payments.utils.scheduled_tasks.send_payment_reports",
+		"zoyktech_zambia_payments.zoyktech_zambia_payments.utils.subscription_scheduler.process_due_subscriptions",
+	],
+	"hourly": [
+		"zoyktech_zambia_payments.zoyktech_zambia_payments.utils.scheduled_tasks.check_pending_payments",
+		"zoyktech_zambia_payments.zoyktech_zambia_payments.doctype.payment_dashboard.payment_dashboard.refresh_dashboard_cache",
+		"zoyktech_zambia_payments.zoyktech_zambia_payments.utils.subscription_scheduler.check_pending_subscription_payments",
+	],
+	"monthly": [
+		"zoyktech_zambia_payments.zoyktech_zambia_payments.utils.scheduled_tasks.cleanup_old_payments"
+	],
 }
 
 # Testing
@@ -203,11 +205,11 @@ before_tests = "zoyktech_zambia_payments.install.before_tests.setup_test_data"
 # ------------------------------
 #
 override_whitelisted_methods = {
-    "erpnext.accounts.doctype.payment_entry.payment_entry.make_payment_entry": "zoyktech_zambia_payments.zoyktech_zambia_payments.overrides.payment_entry.make_payment_entry"
+	"erpnext.accounts.doctype.payment_entry.payment_entry.make_payment_entry": "zoyktech_zambia_payments.zoyktech_zambia_payments.overrides.payment_entry.make_payment_entry"
 }
 
 override_whitelisted_methods = {
-    "erpnext.accounts.doctype.payment_entry.payment_entry.get_payment_entry": "zoyktech_zambia_payments.zoyktech_zambia_payments.overrides.payment_entry.get_payment_entry"
+	"erpnext.accounts.doctype.payment_entry.payment_entry.get_payment_entry": "zoyktech_zambia_payments.zoyktech_zambia_payments.overrides.payment_entry.get_payment_entry"
 }
 #
 # each overriding function accepts a `data` argument;
@@ -223,25 +225,20 @@ override_whitelisted_methods = {
 # Fixtures are used to automatically export and import customizations
 # like Custom Fields, Property Setters, Client Scripts, etc.
 fixtures = [
-    {
-        "dt": "Custom Field", 
-        "filters": [
-            ["module", "=", "Zoyktech Zambia Payments"]
-        ]
-    },
-    {"dt": "Property Setter"},
-    {"dt": "Client Script"},
-    {"dt": "Server Script"},
-    {"dt": "DocType"}  # This will export your custom doctypes
+	{"dt": "Custom Field", "filters": [["module", "=", "Zoyktech Zambia Payments"]]},
+	{"dt": "Property Setter"},
+	{"dt": "Client Script"},
+	{"dt": "Server Script"},
+	{"dt": "DocType"},  # This will export your custom doctypes
 ]
 
 # Website Route Rules
 # ------------------------------
 website_route_rules = [
-    {'from_route': '/payment', 'to_route': 'payment'},
-    {'from_route': '/payment/success', 'to_route': 'payment_success'},
-    {'from_route': '/payment/failed', 'to_route': 'payment_failed'},
-    {'from_route': '/payment/pending', 'to_route': 'payment_pending'}
+	{"from_route": "/payment", "to_route": "payment"},
+	{"from_route": "/payment/success", "to_route": "payment_success"},
+	{"from_route": "/payment/failed", "to_route": "payment_failed"},
+	{"from_route": "/payment/pending", "to_route": "payment_pending"},
 ]
 
 # website_context = {
@@ -305,3 +302,4 @@ website_route_rules = [
 # default_log_clearing_doctypes = {
 # 	"Logging DocType Name": 30  # days to retain logs
 # }
+	

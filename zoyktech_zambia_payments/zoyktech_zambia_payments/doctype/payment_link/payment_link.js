@@ -1,6 +1,5 @@
 // payment_link.js
 
-
 // =============================================
 // FORM VIEW SCRIPT - Payment Link
 // =============================================
@@ -89,7 +88,7 @@ function add_custom_css(frm) {
             background-color: #fff;
             overflow: hidden;
         }
-        
+
         .custom-payment-url-section h5 {
             margin: 0;
             padding: 12px 15px;
@@ -99,12 +98,12 @@ function add_custom_css(frm) {
             font-size: 14px;
             color: #36414c;
         }
-        
+
         .custom-payment-url-section .input-group {
             border-radius: 0;
             margin: 0;
         }
-        
+
         .custom-payment-url-section .form-control {
             border: none;
             border-radius: 0;
@@ -113,7 +112,7 @@ function add_custom_css(frm) {
             font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
             background-color: #f8f9fa;
         }
-        
+
         .custom-payment-url-section .btn-copy-url {
             border: none;
             background-color: #5e64ff;
@@ -122,11 +121,11 @@ function add_custom_css(frm) {
             border-radius: 0;
             transition: background-color 0.2s ease;
         }
-        
+
         .custom-payment-url-section .btn-copy-url:hover {
             background-color: #4a50e0;
         }
-        
+
         .custom-payment-url-section small {
             display: block;
             padding: 10px 15px;
@@ -135,39 +134,39 @@ function add_custom_css(frm) {
             font-size: 12px;
             color: #6c7680;
         }
-        
+
         .custom-status-indicator {
             margin-top: 20px;
         }
-        
+
         .custom-status-indicator .alert {
             margin-bottom: 0;
             border-radius: 6px;
             border: 1px solid;
         }
-        
+
         .custom-status-indicator h6 {
             margin-top: 0;
             margin-bottom: 10px;
             font-weight: 600;
             font-size: 14px;
         }
-        
+
         .custom-status-indicator p {
             margin-bottom: 8px;
             font-size: 13px;
             line-height: 1.5;
         }
-        
+
         .custom-status-indicator p:last-child {
             margin-bottom: 0;
         }
-        
+
         .custom-status-indicator strong {
             color: #36414c;
             font-weight: 600;
         }
-        
+
         .qr-code-container {
             text-align: center;
             margin: 20px 0;
@@ -176,26 +175,26 @@ function add_custom_css(frm) {
             border-radius: 6px;
             border: 1px solid #d1d8dd;
         }
-        
+
         .qr-code-container h6 {
             margin-top: 0;
             margin-bottom: 15px;
             font-weight: 600;
             color: #36414c;
         }
-        
+
         .qr-code-img {
             max-width: 200px;
             margin: 0 auto;
         }
-        
+
         .usage-stats {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
             gap: 15px;
             margin: 20px 0;
         }
-        
+
         .stat-card {
             background: white;
             border: 1px solid #d1d8dd;
@@ -204,38 +203,38 @@ function add_custom_css(frm) {
             text-align: center;
             transition: transform 0.2s ease, box-shadow 0.2s ease;
         }
-        
+
         .stat-card:hover {
             transform: translateY(-2px);
             box-shadow: 0 4px 12px rgba(0,0,0,0.1);
         }
-        
+
         .stat-card .stat-value {
             font-size: 24px;
             font-weight: 700;
             color: #5e64ff;
             margin-bottom: 5px;
         }
-        
+
         .stat-card .stat-label {
             font-size: 12px;
             color: #6c7680;
             text-transform: uppercase;
             letter-spacing: 0.5px;
         }
-        
+
         .stat-card.success {
             border-left: 4px solid #5cb85c;
         }
-        
+
         .stat-card.warning {
             border-left: 4px solid #f0ad4e;
         }
-        
+
         .stat-card.info {
             border-left: 4px solid #5bc0de;
         }
-        
+
         .custom-buttons-section {
             margin: 20px 0;
             padding: 15px;
@@ -243,14 +242,14 @@ function add_custom_css(frm) {
             border-radius: 6px;
             border: 1px solid #d1d8dd;
         }
-        
+
         .custom-buttons-section h6 {
             margin-top: 0;
             margin-bottom: 15px;
             font-weight: 600;
             color: #36414c;
         }
-        
+
         .button-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
@@ -373,7 +372,7 @@ function show_payment_url(frm) {
 					)}" readonly
                         style="${!is_active ? "background-color: #f8f9fa; color: #8d99a6;" : ""}">
                     <div class="input-group-append">
-                        <button class="btn btn-copy-url" type="button" 
+                        <button class="btn btn-copy-url" type="button"
                             ${!is_active ? 'disabled style="background-color: #8d99a6;"' : ""}>
                             <i class="fa fa-copy"></i> ${__("Copy")}
                         </button>
@@ -526,8 +525,8 @@ function show_qr_code(frm) {
                 <div class="qr-code-img">
                     <img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(
 						frm.doc.payment_url
-					)}" 
-                         alt="Payment QR Code" 
+					)}"
+                         alt="Payment QR Code"
                          style="width: 100%; height: auto; border-radius: 4px;">
                 </div>
                 <p style="margin-top: 10px; font-size: 12px; color: #6c7680;">
@@ -1005,8 +1004,8 @@ frappe.listview_settings["Payment Link"] = {
                     ${
 						is_active
 							? `
-                        <button class="btn btn-xs btn-default pull-right btn-copy-list" 
-                                data-url="${value}" 
+                        <button class="btn btn-xs btn-default pull-right btn-copy-list"
+                                data-url="${value}"
                                 style="margin-top: -3px;">
                             <i class="fa fa-copy"></i>
                         </button>
@@ -1111,8 +1110,8 @@ function add_quick_filter_buttons(listview) {
 	// Add filter buttons
 	quick_filters.forEach((filter) => {
 		const $button = $(`
-            <button class="btn btn-default btn-xs" 
-                style="margin-right: 5px; margin-bottom: 5px; 
+            <button class="btn btn-default btn-xs"
+                style="margin-right: 5px; margin-bottom: 5px;
                 ${filter.color ? `border-left: 3px solid ${filter.color};` : ""}">
                 ${filter.label}
             </button>
@@ -1393,60 +1392,60 @@ function add_listview_css() {
             border-left: 4px solid #d1d8dd;
             transition: all 0.2s ease;
         }
-        
+
         .payment-link-list .list-row:hover {
             background-color: #f5f7fa;
             transform: translateX(2px);
         }
-        
+
         .payment-link-list .list-row[data-status="Pending"] {
             border-left-color: #f0ad4e;
         }
-        
+
         .payment-link-list .list-row[data-status="Paid"] {
             border-left-color: #5cb85c;
         }
-        
+
         .payment-link-list .list-row[data-status="Failed"] {
             border-left-color: #d9534f;
         }
-        
+
         .payment-link-list .list-row[data-status="Cancelled"],
         .payment-link-list .list-row[data-status="Expired"] {
             border-left-color: #777;
         }
-        
+
         .list-row-col .btn-copy-list {
             opacity: 0;
             transition: opacity 0.2s ease;
         }
-        
+
         .list-row:hover .btn-copy-list {
             opacity: 1;
         }
-        
+
         .empty-state-message .btn-create-first {
             padding: 10px 30px;
             font-size: 16px;
         }
-        
+
         .badge {
             padding: 3px 8px;
             font-size: 11px;
             font-weight: 600;
             border-radius: 10px;
         }
-        
+
         .badge-success {
             background-color: #d4edda;
             color: #155724;
         }
-        
+
         .badge-warning {
             background-color: #fff3cd;
             color: #856404;
         }
-        
+
         .badge-danger {
             background-color: #f8d7da;
             color: #721c24;
